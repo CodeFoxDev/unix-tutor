@@ -1,0 +1,9 @@
+{
+  "extends": ["stylelint-config-standard"],
+  "rules": {
+    "custom-property-empty-line-before": null,
+    "function-no-unknown": null,
+    "font-family-name-quotes": null,
+    "selector-class-pattern": null
+  }
+}

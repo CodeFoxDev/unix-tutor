@@ -1,0 +1,79 @@
+/* stylelint-disable color-function-notation */
+/* stylelint-disable alpha-value-notation */
+:root {
+  --text: #e3e3f2;
+  --background: #05050f;
+  --primary: #b5cded;
+  --secondary: #344865;
+  --accent: #bfcc94;
+  --border: rgba(227, 227, 242, 0.2);
+}
+
+html,
+body {
+  font-family: "Poppins", sans-serif;
+  background: var(--background);
+  color: var(--text);
+  margin: 0;
+  padding: 0;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  margin: 0;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+nav {
+  height: 5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border);
+  padding-inline: 2rem;
+
+  & .links {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+}
+
+.link {
+  display: flex;
+  position: relative;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 1rem;
+
+  &::before {
+    content: "";
+    position: absolute;
+    bottom: 0.3rem;
+    left: 0.5;
+    background: var(--accent);
+    height: 1.5px;
+    width: calc(100% - 1rem);
+    transform-origin: right;
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+  }
+
+  &:hover::before {
+    transform-origin: left;
+    transform: scaleX(1);
+  }
+}

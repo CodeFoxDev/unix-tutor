@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "rootDir": ".",
+    "strict": true,
+    "paths": {
+      "types/*": [
+        "./types/*"
+      ],
+      "*": [
+        "./types/global.d.ts"
+      ]
+    },
+    "lib": [
+      "ES6",
+      "DOM"
+    ],
+  }
+}
