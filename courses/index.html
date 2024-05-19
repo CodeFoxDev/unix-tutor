@@ -7,19 +7,24 @@
       content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Unix Tutor - Courses</title>
+    <link rel="stylesheet" href="/styles.css" crossorigin="anonymous" />
+    <script src="/src/main.js" type="module"></script>
   </head>
   <body>
-    <div id="1">
-      <input type="checkbox" id="question_1" />
-      <label for="question_1">test 1</label>
-    </div>
-    <div id="2">
-      <input type="checkbox" id="question_2" />
-      <label for="question_2">test 2</label>
-    </div>
-    <div id="3">
-      <input type="checkbox" id="question_3" />
-      <label for="question_3">test 3</label>
-    </div>
+    <nav data-scroll-class="filter" data-scroll-threshold="32vh">
+      <div class="logo">
+        <a data-link-replace href="/">
+          <h1>Unix Tutor</h1>
+        </a>
+      </div>
+      <div class="links">
+        <a data-link-replace href="/about" class="link"> About </a>
+        <a data-link-replace href="/courses" class="link"> Courses </a>
+        <a data-link-replace href="/contact" class="link"> Contact </a>
+      </div>
+    </nav>
+    <main class="home">
+      <section class="courses"></section>
+    </main>
   </body>
 </html>
