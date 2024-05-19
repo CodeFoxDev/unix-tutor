@@ -1,1 +1,2 @@
-import "../components/nav.js";
+import "./effects/scroll.js";
+import "./effects/typing.js";

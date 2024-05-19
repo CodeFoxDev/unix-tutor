@@ -7,6 +7,9 @@
   --secondary: #344865;
   --accent: #bfcc94;
   --border: rgba(227, 227, 242, 0.2);
+
+  --selection-bg: var(--accent);
+  --selection-color: var(--background);
 }
 
 html,
@@ -16,6 +19,7 @@ body {
   color: var(--text);
   margin: 0;
   padding: 0;
+  font-size: 1.1rem;
 }
 
 h1,
@@ -37,13 +41,31 @@ a {
   box-sizing: border-box;
 }
 
+::selection {
+  background: var(--selection-bg);
+  color: var(--selection-color);
+}
+
 nav {
+  position: fixed;
+  z-index: 100;
+  top: 0;
+  left: 0;
+  width: 100%;
   height: 5rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
   border-bottom: 1px solid var(--border);
   padding-inline: 2rem;
+  transition: background 0.3s ease;
+
+  &.filter {
+    background: rgba(5, 5, 15, 0.4);
+    backdrop-filter: blur(6px);
+    /* stylelint-disable-next-line property-no-vendor-prefix */
+    -webkit-backdrop-filter: blur(6px);
+  }
 
   & .links {
     display: flex;
@@ -75,5 +97,92 @@ nav {
   &:hover::before {
     transform-origin: left;
     transform: scaleX(1);
+  }
+}
+
+/* Improve hover effect */
+.button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.8rem 1.5rem;
+  background: var(--accent);
+  border-radius: 0.5rem;
+  color: var(--background);
+  position: relative;
+  isolation: isolate;
+  transition: box-shadow 0.3s ease;
+
+  &:hover {
+    box-shadow: 0.1rem 0.1rem 0.5rem var(--accent),
+      -0.1rem 0.1rem 0.5rem var(--accent), 0.1rem -0.1rem 0.5rem var(--accent),
+      0.1rem -0.1rem 0.5rem var(--accent);
+  }
+}
+
+section.landing {
+  height: calc(100vh + 24rem);
+  width: 100%;
+  position: relative;
+  isolation: isolate;
+
+  & > .title {
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    gap: 1rem;
+    flex-direction: column;
+    justify-content: center;
+    padding-left: max(1rem, 3%);
+
+    & .text {
+      --selection-bg: #60f;
+      --selection-color: var(--text);
+
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+
+      & h1 {
+        font-size: 5rem;
+
+        &:first-child {
+          margin-bottom: -1rem;
+        }
+      }
+    }
+
+    & .description {
+      width: 42rem;
+    }
+
+    & .buttons {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+    }
+  }
+
+  & > .about {
+    height: 24rem;
+  }
+
+  & > .background {
+    pointer-events: none;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    position: absolute;
+    z-index: -1;
+    overflow: hidden;
+
+    & > object {
+      filter: contrast(80%);
+      position: absolute;
+      top: -20rem;
+      right: -26rem;
+      height: calc(100vh + 40rem);
+    }
   }
 }

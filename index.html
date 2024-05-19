@@ -17,7 +17,7 @@
     <script src="/src/main.js" type="module"></script>
   </head>
   <body>
-    <nav>
+    <nav data-scroll-class="filter" data-scroll-threshold="32vh">
       <div class="logo">
         <a data-link-replace href="/">
           <h1>Unix Tutor</h1>
@@ -29,7 +29,41 @@
         <a data-link-replace href="/contact" class="link"> Contact </a>
       </div>
     </nav>
-    <div id="start"></div>
-    <div id="about"></div>
+    <main class="home">
+      <section class="landing">
+        <div class="title">
+          <div class="text">
+            <h1>Elevate your</h1>
+            <h1>
+              <span
+                data-typing-animation
+                data-typing-interval="4000"
+                data-typing-speed="60"
+                data-typing-words="[ 'webdev', 'git', 'linux', 'backend' ]">
+                webdev
+              </span>
+              skills
+            </h1>
+          </div>
+          <p class="description">
+            Explore our broud range of courses for elevating your development
+            skills. We teach everything related to web development, from
+            framework usage, to git, and how to use linux and other tools to
+            deploy your projects.
+          </p>
+          <div class="buttons">
+            <a data-link-replace href="/courses" class="button">
+              Explore courses
+            </a>
+          </div>
+        </div>
+        <div class="about"></div>
+        <div class="background">
+          <object
+            data="/assets/landing_gradient.svg"
+            type="image/svg+xml"></object>
+        </div>
+      </section>
+    </main>
   </body>
 </html>
