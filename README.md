@@ -1,0 +1,17 @@
+# TODO
+- [ ] Algehele indruk 10
+- [ ] Startpagina (tekst & plaatjes) 5
+- [ ] Over ons (tekst, plaatjes, contactformulier) 20
+- [x] Werking menu (zichtbaar/onzichtbaar maken inhoud) 25
+- [x] Quizz met radiobuttons (incl. inline feedback) 25
+- [ ] Quizz met checkboxes (incl. inline feedback) 25
+- [ ] Quizz met pull-down (incl. inline feedback) 25
+- [ ] Totaal goede & foute antwoorden 25
+- [ ] Percentage goede en foute antwoorden 25
+- [x] Aftrek per ontbrekende tutorial pagina -40 (hebben we niet)
+- [ ] HTML code (werking, inspringen, commentaar, etc) 10
+- [ ] CSS code (werking, inspringen, commentaar, etc) 10
+- [x] Geen overbodige code en bestanden 5
+- [ ] Ontwerpdocument (wireframes, doel/doelgroep, kleurenstal, logo, usability feedback, logboek, etc) 30
+- [ ] Implementatie conform ontwerp 5
+- [ ] Volledig ingeleverd als zip-bestand via Classroom of Magister 5

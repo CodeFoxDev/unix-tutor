@@ -11,7 +11,7 @@
     <script src="/src/main.js" type="module"></script>
   </head>
   <body>
-    <nav data-scroll-class="filter" data-scroll-threshold="32vh">
+    <nav class="hidden" data-scroll-class="filter" data-scroll-threshold="32vh">
       <div class="logo">
         <a href="/">
           <h1>Unix Tutor</h1>
@@ -23,8 +23,17 @@
         <a href="/contact" class="link"> Contact </a>
       </div>
     </nav>
-    <main class="courses">
-      <section class="courses"></section>
+    <main class="course-viewer">
+      <section class="viewer">
+        <div class="sidebar">
+          <a href="/courses" class="button">
+            <span class="material-symbols-rounded"> chevron_left </span>
+            Back to overview
+          </a>
+          <div class="sections" id="viewer-sidebar-sections"></div>
+        </div>
+        <div class="page" id="viewer-outlet"></div>
+      </section>
     </main>
   </body>
 </html>

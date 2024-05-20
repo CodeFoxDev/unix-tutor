@@ -69,17 +69,21 @@ export function render(page, updateUrl) {
 }
 
 /**
- * @param {string} path
+ * @param {string} _path
  */
-export async function navigate(path, updateUrl) {
+export async function navigate(_path, updateUrl) {
+  let [path, search] = _path.split("?");
+  if (search && search.length > 0) search = `?${search}`;
   const shouldNavigate = emit("navigate", { path });
   if (shouldNavigate === false) return;
   const page = pages.find((e) => e.path === path) ?? (await prefetch(path));
   if (!page) return;
 
   render(page, updateUrl);
-  emit("load", { path });
+  emit("load", { path, search });
 }
+
+window.navigate = navigate;
 
 /**
  * @param {Router.Page} page
@@ -126,6 +130,8 @@ export function on(event, cb) {
  * @param {Router.EventData} data
  */
 function emit(event, data) {
+  if (data.path.endsWith("/")) data.path = data.path.slice(0, -1);
+
   for (const listener of listeners) {
     if (listener.event !== event) continue;
     const res = listener.cb(data);
@@ -136,6 +142,11 @@ function emit(event, data) {
 
 initListeners();
 on("load", () => initListeners());
+setTimeout(
+  () => emit("load", { path: location.pathname, search: location.search }),
+  0
+);
+// emit load on page load
 
 window.addEventListener("popstate", ({ state }) => {
   if (state.path) navigate(state.path, false);

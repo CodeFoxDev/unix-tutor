@@ -1,4 +1,4 @@
-import "./router.js";
+import "./courses.js";
 import "./effects/scroll.js";
 import "./effects/typing.js";
-import "./courses.js";
+import "./router.js";

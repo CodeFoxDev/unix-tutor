@@ -1,1 +1,3 @@
-export { default as git } from "./git.js";
+import { default as git } from "./git.data.js";
+
+export const courses = [git];

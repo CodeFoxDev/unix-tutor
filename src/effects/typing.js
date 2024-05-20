@@ -29,10 +29,9 @@ export function initListeners() {
       if (inProgress) return;
       if (index < words.length - 1) index++;
       else index = 0;
-      const content = words[index];
 
       inProgress = true;
-      await typeContent(element, content, speed);
+      await typeContent(element, words[index], speed);
       inProgress = false;
     }, interval);
   }

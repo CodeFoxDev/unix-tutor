@@ -1,0 +1,11 @@
+{
+  "singleQuote": false,
+  "overrides": [
+    {
+      "files": "**/*.data.js",
+      "options": {
+        "printWidth": 200
+      }
+    }
+  ]
+}

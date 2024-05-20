@@ -1,8 +1,17 @@
 declare namespace Courses {
   interface Course {
-    name: string;
+    id: string;
     title: string;
     description: string;
+    authors: string[];
+    sections: Section[];
+
+    insertSidebar(): void;
+    render(section: number, page: number): void;
+  }
+
+  interface Section {
+    name: string;
     pages: Page[];
   }
 
@@ -12,7 +21,7 @@ declare namespace Courses {
    */
   interface Page {
     title: string;
-    content: CourseContent.Content[];
+    content: (CourseContent.Content | string)[];
     render(): Element;
   }
 }
@@ -47,9 +56,16 @@ declare namespace CourseContent {
     placeholder?: string;
     options: string[];
   }
+  interface Fieldset extends Content {
+    type: "fieldset";
+    question: string;
+    items: Content[];
+  }
   interface MultipleChoice extends Content {
     type: "multipleChoice";
     radio: boolean;
+    text: string;
+    correct: boolean;
   }
 }
 
@@ -59,6 +75,7 @@ declare namespace Router {
 
   interface EventData {
     path: string;
+    search: string;
   }
 
   interface Listener {
