@@ -26,6 +26,7 @@ export function initListeners() {
     link.addEventListener("click", (e) => {
       e.preventDefault();
 
+      if (link.pathname === location.pathname) return;
       const shouldNavigate = emit("navigate", { path: link.pathname });
       if (shouldNavigate === false) return;
 
@@ -42,36 +43,41 @@ export function initListeners() {
 /**
  * @param {Router.Page} page
  */
-export function render(page) {
+export function render(page, updateUrl) {
   const doc = parser.parseFromString(page.data, "text/html");
-  updateMeta(page, doc.title);
+  updateMeta(page, doc.title, updateUrl);
 
-  const nav = document.body.querySelector("nav");
-  const newNav = doc.body.querySelector("nav");
-  if (newNav !== undefined && !newNav.classList.contains("hidden"))
-    nav.classList.remove("hidden");
-  else nav.classList.add("hidden");
+  try {
+    const nav = document.body.querySelector("nav");
+    const newNav = doc.body.querySelector("nav");
+    if (newNav !== undefined && !newNav.classList.contains("hidden"))
+      nav.classList.remove("hidden");
+    else nav.classList.add("hidden");
 
-  const main = document.body.querySelector("main");
-  const newMain = doc.body.querySelector("main");
-  document.body.removeChild(main);
-  document.body.appendChild(newMain);
+    const main = document.body.querySelector("main");
+    const newMain = doc.body.querySelector("main");
+    document.body.removeChild(main);
+    document.body.appendChild(newMain);
 
-  console.log("Rendered page:", page.path);
+    console.log("Rendered page:", page.path);
+  } catch {
+    console.log(
+      `Failed to render page: ${page.path}, falling back to replace full body`
+    );
+    document.body = doc.body;
+  }
 }
 
 /**
  * @param {string} path
  */
-export async function navigate(path) {
+export async function navigate(path, updateUrl) {
   const shouldNavigate = emit("navigate", { path });
   if (shouldNavigate === false) return;
-  const page =
-    pages.find((e) => e.path === link.pathname) ??
-    (await prefetch(link.pathname));
+  const page = pages.find((e) => e.path === path) ?? (await prefetch(path));
   if (!page) return;
 
-  render(page);
+  render(page, updateUrl);
   emit("load", { path });
 }
 
@@ -79,9 +85,10 @@ export async function navigate(path) {
  * @param {Router.Page} page
  * @param {string} title
  */
-function updateMeta(page, title) {
+function updateMeta(page, title, updateUrl) {
+  updateUrl ??= true;
   document.title = title;
-  history.pushState({}, "", page.path);
+  if (updateUrl === true) history.pushState({ path: page.path }, "", page.path);
 }
 
 /**
@@ -129,3 +136,7 @@ function emit(event, data) {
 
 initListeners();
 on("load", () => initListeners());
+
+window.addEventListener("popstate", ({ state }) => {
+  if (state.path) navigate(state.path, false);
+});
