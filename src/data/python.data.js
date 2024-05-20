@@ -27,13 +27,51 @@ export default Course({
 
         Header("Basics"),
 
-        `Python is known for its simplicity and beginner-friendly syntax, 
+        `Python is known for its simplicity and beginner-friendly <b>syntax</b> (grammar in programming languages), 
         which makes it an awesome language to learn for beginners.
         It's widely used in analytics and algorithms.
         
-        Python has a large array of functions, to support all your programming needs.
-        `
-      )
+        Python has a large array of functions, that supports many of your programming needs.
+        What's more, Python has a large community,
+        which means you'll be able to find resources and help very easily`,
+      
+        Header('Quiz Time!'),
+
+        Fieldset(
+          `page1_what_question`,
+          `What is Python?`,
+          `While Python is indeed a snake species,
+          in this context, we're referring to Python as the programming language`,
+          RadioBox(`a snake species`),
+          RadioBox(`a programming language`),
+          RadioBox(`an IDE (integrated development environment)`)
+        ),
+
+        Fieldset(
+          `page1_benefit_question`,
+          `Why is Python a good programming language to learn? Choose all options.`,
+          `Python is known to be straightforward and has easy-to-learn syntax.
+          However, Python has a bad reputation on speed.
+          For fast languages, C++, Java and Rust are all good options,
+          though they're less intuitive than Python and each have different uses.`,
+          CheckBox(`It's a basic language`),
+          CheckBox(`It's a fast language`),
+          CheckBox(`It has easy syntax.`)
+        )
+      ),
     ),
+    Section(
+      "Syntax",
+
+      Page(
+        "Numbers"
+      ),
+      Page(
+        "Text"
+      ),
+      Page(
+        "Lists"
+      )
+    )
   ],
 });
