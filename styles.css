@@ -348,6 +348,7 @@ main.course-viewer {
         align-items: center;
         justify-content: flex-end;
         margin-top: 1rem;
+        margin-bottom: 6rem;
         gap: 1rem;
 
         & > .button {
@@ -359,8 +360,22 @@ main.course-viewer {
         margin-inline: 0.5rem;
       }
 
+      & .conditional-boundry {
+        &.hidden {
+          display: none;
+        }
+      }
+
       & h3 {
         padding: 1rem 0 0.5rem;
+      }
+
+      & code.block {
+        display: block;
+        background: var(--code);
+        padding: 1rem;
+        margin: 0.5rem;
+        border-radius: 0.5rem;
       }
 
       & code.inline {
@@ -470,7 +485,10 @@ main.course-viewer {
           }
         }
 
-        & div.input:has(input:checked) ~ .btn-wrapper .button:not(.done) {
+        &
+          div.input:has(input:not([disabled]):checked)
+          ~ .btn-wrapper
+          .button:not(.done) {
           cursor: pointer;
           background: var(--accent);
 

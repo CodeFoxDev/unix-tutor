@@ -41,14 +41,6 @@ declare namespace CourseContent {
     type: "paragraph";
     text: string;
   }
-  interface List extends Content {
-    type: "paragraph";
-    items: string[];
-  }
-  interface Code extends Content {
-    type: "code";
-    text: string;
-  }
   interface Input extends Content {
     type: "input";
   }
@@ -64,6 +56,11 @@ declare namespace CourseContent {
     answered: boolean;
     render(): void;
     check(): void;
+  }
+  interface Conditional extends Content {
+    type: "conditional";
+    shown: boolean;
+    render(): void;
   }
   interface MultipleChoice extends Content {
     type: "multipleChoice";

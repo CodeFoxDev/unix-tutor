@@ -1,10 +1,6 @@
 import { courses } from "./data/courses.js";
 import { on, navigate } from "./router.js";
 
-/* function load() {
-  document.querySelector("main")?.append(git.sections[0].pages[0].render());
-} */
-
 /**
  * @param {Courses.Course} course
  */
@@ -21,6 +17,8 @@ function load(course, section = 0, page = 0) {
     course.sections.length,
     course.sections[section].pages.length
   );
+
+  // TODO: update document title
 }
 
 on("load", (e) => {

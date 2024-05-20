@@ -1,6 +1,8 @@
 import { h } from "../element.js";
 import { navigate } from "../router.js";
 
+// TODO: safe progress in localStorage, or at least between pages
+
 const _listeners = [];
 const update = (name, cb) => {
   _listeners.push({
@@ -253,6 +255,25 @@ export function OrderedList(...items) {
 }
 
 /**
+ * @param {string[]} items
+ * @returns {CourseContent.Paragraph}
+ */
+export function Code(...items) {
+  return {
+    type: "paragraph",
+    items,
+    render() {
+      const root = h("code", { class: "block" });
+      for (const i of items) {
+        if (typeof i === "string") root.appendChild(document.createTextNode(i));
+        else root.appendChild(i.render?.());
+      }
+      return root;
+    },
+  };
+}
+
+/**
  * @param {Omit<CourseContent.Input, 'type' | 'render'>} section
  * @returns {CourseContent.Input}
  */
@@ -275,13 +296,17 @@ export function Dropdown(section) {
   };
 }
 
+// TODO: maybe change to object
 /**
+ * @param {string} id
  * @param {string} question
  * @param {string} feedback
  * @param {CourseContent.Content[]} items
  * @returns {CourseContent.Fieldset}
  */
-export function Fieldset(question, feedback, ...items) {
+export function Fieldset(id, question, feedback, ...items) {
+  let answers = [];
+  let answered = false;
   let tries = 0;
   const feedbackEle = h(
     "p",
@@ -299,7 +324,7 @@ export function Fieldset(question, feedback, ...items) {
     type: "fieldset",
     question,
     items,
-    answered: false,
+    answered,
     render() {
       const root = h("fieldset", {}, h("legend", {}, question));
       const name = Math.random().toString(36).slice(2);
@@ -310,6 +335,7 @@ export function Fieldset(question, feedback, ...items) {
     },
     check() {
       let checked = -1;
+      // TODO: dont't count already wrong answer
       for (const [item, i] of iter(items)) {
         if (!item.ref?.firstChild?.checked === true) continue;
         checked = i;
@@ -325,8 +351,9 @@ export function Fieldset(question, feedback, ...items) {
 
         feedbackEle.classList.remove("hidden");
         button.lastChild.classList.add("disabled");
-        this.answered = true;
+        this.answered = answered = true;
         callUpdate("fieldset");
+        ID.callUpdate(id, true);
       };
 
       if (items[checked].correct === true) showCorrect();
@@ -338,6 +365,29 @@ export function Fieldset(question, feedback, ...items) {
 
       tries++;
       if (tries === 2) showCorrect();
+    },
+  };
+}
+
+/**
+ * @param {string} id
+ * @param  {...CourseContent.Content} content
+ * @returns {CourseContent.Conditional}
+ */
+export function Conditional(id, ...content) {
+  return {
+    type: "conditional",
+    render() {
+      const root = h("div", { class: "conditional-boundry hidden" });
+      for (const item of content)
+        if (typeof item === "string") root.innerHTML += item;
+        else root.appendChild(item.render());
+
+      ID.update(id, (e) => {
+        if (e === true) root.classList.remove("hidden");
+        else root.classList.add("hidden");
+      });
+      return root;
     },
   };
 }
@@ -409,3 +459,21 @@ function* iter(val) {
     yield [val[i], i];
   }
 }
+
+const ID = {
+  _registered: [],
+  /**
+   * @param {string} id
+   */
+  callUpdate: (id, e) => {
+    const found = ID._registered.filter((e) => e.id === id);
+    for (const f of found) f.cb?.(e);
+  },
+  /**
+   * @param {string} id
+   * @param {(e: any) => void} cb
+   */
+  update: (id, cb) => {
+    ID._registered.push({ id, cb });
+  },
+};
