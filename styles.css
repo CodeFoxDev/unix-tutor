@@ -142,6 +142,15 @@ nav {
   transition: translate 0.3s ease;
   cursor: pointer;
 
+  &.disabled {
+    cursor: not-allowed;
+    background: var(--border);
+
+    &::after {
+      background: transparent;
+    }
+  }
+
   &::after {
     content: "";
     position: absolute;
@@ -164,13 +173,6 @@ nav {
   &:hover::after {
     top: 0.5rem;
     left: 0.5rem;
-  }
-
-  & + &:hover::after {
-    width: calc(100% + 40px);
-    height: calc(100% + 40px);
-    top: -10px;
-    left: -10px;
   }
 }
 
@@ -341,7 +343,19 @@ main.course-viewer {
         }
       }
 
-      & > *:not(:first-child) {
+      & .next-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        margin-top: 1rem;
+        gap: 1rem;
+
+        & > .button {
+          display: inline-flex;
+        }
+      }
+
+      & > *:not(:first-child, :last-child) {
         margin-inline: 0.5rem;
       }
 

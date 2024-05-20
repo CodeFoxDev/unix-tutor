@@ -9,8 +9,18 @@ import { on, navigate } from "./router.js";
  * @param {Courses.Course} course
  */
 function load(course, section = 0, page = 0) {
+  if (section >= course.sections.length - 1)
+    section = course.sections.length - 1;
+  if (page >= course.sections[section].pages.length - 1)
+    page = course.sections[section].pages.length - 1;
+
   course.insertSidebar();
-  course.render(section, page);
+  course.render(
+    section,
+    page,
+    course.sections.length,
+    course.sections[section].pages.length
+  );
 }
 
 on("load", (e) => {

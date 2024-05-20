@@ -22,6 +22,7 @@ declare namespace Courses {
   interface Page {
     title: string;
     content: (CourseContent.Content | string)[];
+    done: boolean;
     render(): Element;
   }
 }
@@ -60,6 +61,9 @@ declare namespace CourseContent {
     type: "fieldset";
     question: string;
     items: Content[];
+    answered: boolean;
+    render(): void;
+    check(): void;
   }
   interface MultipleChoice extends Content {
     type: "multipleChoice";

@@ -1,7 +1,21 @@
 import { h } from "../element.js";
+import { navigate } from "../router.js";
+
+const _listeners = [];
+const update = (name, cb) => {
+  _listeners.push({
+    name,
+    cb,
+  });
+  cb();
+};
+const callUpdate = (name) =>
+  _listeners.forEach((e) => e.name === name && e.cb());
 
 /** @param {Courses.Course} course */
 export function Course(course) {
+  let active;
+
   return {
     ...course,
     insertSidebar() {
@@ -10,29 +24,58 @@ export function Course(course) {
 
       for (const sec of course.sections) {
         sections.appendChild(h("p", { class: "section-header" }, sec.name));
+
         for (const page of sec.pages) {
           const button = h(
             "div",
-            { class: "section-page" },
+            {
+              class: "section-page",
+              id: `btn${course.sections.indexOf(sec)}-${sec.pages.indexOf(
+                page
+              )}`,
+            },
             h("p", {}, page.title)
           );
+          update("pageDone", () => {
+            if (page.done === true) button.classList.add("done");
+          });
           sections.appendChild(button);
           button.addEventListener("click", () => {
-            this.render(course.sections.indexOf(sec), sec.pages.indexOf(page));
+            const ci = course.sections.indexOf(sec);
+            const pi = sec.pages.indexOf(page);
+            this.render(ci, pi, course.sections.length, sec.pages.length);
           });
         }
       }
     },
-    render(section, page) {
+    render(section, page, sections, parts) {
+      let lastInPart = page === parts - 1;
+      let lastInCourse = section === sections - 1 && lastInPart;
+
       const rendered = course.sections[section]?.pages[page]?.render?.(
         section,
-        page
+        page,
+        lastInCourse,
+        lastInPart,
+        (ci, pi) => {
+          if (pi === parts) {
+            ci++;
+            pi = 0;
+          }
+          this.render(ci, pi, sections, parts);
+        }
       );
       if (!rendered) return;
       const outlet = document.querySelector("#viewer-outlet");
       if (!outlet) return;
       outlet.innerHTML = "";
       outlet.append(rendered);
+
+      if (active) active.classList.remove("active");
+      active = document
+        .querySelector("#viewer-sidebar-sections")
+        .querySelector(`#btn${section}-${page}`);
+      active.classList.add("active");
 
       const url = new URL(location);
       url.searchParams.set("page", `${section}-${page}`);
@@ -50,7 +93,8 @@ export function Page(title, ...content) {
   return {
     title,
     content,
-    render(section, page) {
+    done: false,
+    render(section, page, lastInCourse, lastInPart, courseRender) {
       const root = document.createElement("div");
       root.className = "page";
       const header = h(
@@ -64,6 +108,56 @@ export function Page(title, ...content) {
         if (typeof c === "string") root.appendChild(Paragraph(c).render());
         else root.appendChild(c.render());
       }
+
+      // check if all questions have been answered
+      const doneBtn = h(
+        "div",
+        { role: "button", class: "button disabled" },
+        "Mark as done"
+      );
+      const nextBtn = h(
+        "div",
+        { role: "button", class: "button disabled" },
+        lastInCourse
+          ? "Finish course"
+          : `Next ${lastInPart === true ? "part" : "lesson"}`
+      );
+      const wrapper = h("div", { class: "next-wrapper" }, doneBtn, nextBtn);
+      root.appendChild(wrapper);
+      if (this.done === true) {
+        nextBtn.classList.remove("disabled");
+      }
+      let answered = true;
+
+      update("fieldset", () => {
+        if (this.done) return;
+        answered = true;
+        for (const item of content) {
+          if (typeof item === "string") continue;
+          if (item.type !== "fieldset") continue;
+          if (item.answered === false) answered = false;
+        }
+
+        if (!answered) return;
+        doneBtn.classList.remove("disabled");
+      });
+
+      doneBtn.addEventListener("click", () => {
+        if (answered === false) return;
+        this.done = true;
+        callUpdate("pageDone");
+        doneBtn.classList.add("disabled");
+        nextBtn.classList.remove("disabled");
+      });
+
+      nextBtn.addEventListener("click", () => {
+        if (nextBtn.classList.contains("disabled")) return;
+        if (lastInCourse) {
+          return;
+        } // return to overview
+        courseRender(section, page + 1);
+      });
+
       return root;
     },
   };
@@ -135,6 +229,30 @@ export function List(...items) {
 }
 
 /**
+ * @param {string[]} items
+ * @returns {CourseContent.Paragraph}
+ */
+export function OrderedList(...items) {
+  return {
+    type: "paragraph",
+    items: items,
+    render() {
+      const ele = document.createElement("ol");
+      for (const i of items) {
+        if (typeof i === "string") {
+          const e = document.createElement("li");
+          e.innerHTML = i;
+          ele.appendChild(e);
+        } else {
+          ele.appendChild(i.render?.());
+        }
+      }
+      return ele;
+    },
+  };
+}
+
+/**
  * @param {Omit<CourseContent.Input, 'type' | 'render'>} section
  * @returns {CourseContent.Input}
  */
@@ -181,6 +299,7 @@ export function Fieldset(question, feedback, ...items) {
     type: "fieldset",
     question,
     items,
+    answered: false,
     render() {
       const root = h("fieldset", {}, h("legend", {}, question));
       const name = Math.random().toString(36).slice(2);
@@ -198,15 +317,17 @@ export function Fieldset(question, feedback, ...items) {
       }
       if (checked === -1) return;
 
-      function showCorrect() {
+      const showCorrect = () => {
         for (const item of items) {
           item.ref.firstChild.setAttribute("disabled", true);
           if (item.correct === true) item.ref.classList.add("correct");
         }
 
         feedbackEle.classList.remove("hidden");
-        button.lastChild.classList.add("done");
-      }
+        button.lastChild.classList.add("disabled");
+        this.answered = true;
+        callUpdate("fieldset");
+      };
 
       if (items[checked].correct === true) showCorrect();
       else {

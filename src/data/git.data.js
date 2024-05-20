@@ -1,9 +1,8 @@
-import { Course, Section, Page, Header, List, Paragraph, Image, Input, Dropdown, RadioBox, CheckBox, Fieldset } from "./func.js";
+import { Course, Section, Page, Header, List, OrderedList, Image, Input, Dropdown, RadioBox, CheckBox, Fieldset } from "./func.js";
 
 const code = (e) => `<code class="inline">${e}</code>`;
 const link = (e, link) => `<a class="inline link" target="_blank" href="${link}">${e}</a>`;
 
-// prettier-override printWidth=1000
 export default Course({
   id: "git",
   title: "Code management with Git",
@@ -33,7 +32,7 @@ export default Course({
       Page(
         "Interacting with git",
         // content
-        `Git is what's now as a CLI, a command line interface. Git is primarily used through the terminal or via a GUI.
+        `Git is what's now referred to as a CLI, a command line interface. Git is primarily used through the terminal or via a GUI.
         In this course we will explain how to interact with the CLI, because you can generally use the CLI more efficiently and if you now the CLI you will also now how to use GUI's.`,
 
         Header("Test your knowledge"),
@@ -53,7 +52,22 @@ export default Course({
         // implement a block that is only visible if previous question has been answered.
         // explain init, add, commit and status command
       ),
-      Page("Basic commands"),
+      Page(
+        "Basic commands",
+        "In the git world, there are a few commands that are used way more often than other commands.",
+        `These commands include: ${code("add")}, ${code("commit")}, and ${code("status")}. <br>`,
+
+        Header(`${code("add")}`),
+        `The ${code("add")} command is a command used to update the index of the current content found in the code tree that you are currently working in.
+        <br> Usually, it also adds the current content of existing paths as a whole, but with some sub-commands this can be specified.`,
+
+        Header(`${code("commit")}`),
+        `The ${code("commit")} command creates a new commit in your repository. The moment that you use this command, there will be a new commit available online. <br>
+        The ${code("commit")} command basically is used to log your changes in your code. <br> <br>
+        Of course, ${code("commit")} also has an basic syntax. Almost everyone uses <q>-m</q>, an abbreviation for message. <br>
+        In example; <br>
+        ${code("git commit -m <q>First Commit</q>")}`
+      ),
 
       Page(
         "Your first git repository",
@@ -68,13 +82,15 @@ export default Course({
       Page(
         "Going remote",
         Header("Creating an account on github"),
-        `1. Head to ${link("github.com", "https://github.com/signup")} and follow those steps to create your github account`,
-        "2. Once you've finised the setup, go ahead and press <q>Create Repository</q> in the dropdown of the + sign in the top-right corner.",
-        Image("/assets/courses/git/create_repo.png"),
-        "3. Fill out the form to create  your very first repository.",
-        "4. Follow the steps described at the quick setup section below.",
-        Image("/assets/courses/git/quick_setup.png"),
-        "5. In your prefered IDE, open your terminal and type the commands in one by one.",
+        OrderedList(
+          `Head to ${link("github.com", "https://github.com/signup")} and follow those steps to create your github account`,
+          "Once you've finised the setup, go ahead and press <q>Create Repository</q> in the dropdown of the + sign in the top-right corner.",
+          Image("/assets/courses/git/create_repo.png"),
+          "Fill out the form to create  your very first repository.",
+          "Follow the steps described at the quick setup section below.",
+          Image("/assets/courses/git/quick_setup.png"),
+          "In your prefered IDE, open your terminal and type the commands in one by one."
+        ),
 
         // explain push, pull (and fetch?)
         Header("Pushing and pulling")
