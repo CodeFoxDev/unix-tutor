@@ -35,6 +35,7 @@ export default Course({
           "<code>push</code>",
           "<code>pull</code>"
         ),
+        Paragraph(`Everything else is mysterious, and harder to learn`),
       ],
     }),
   ],

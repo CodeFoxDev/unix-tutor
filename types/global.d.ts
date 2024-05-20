@@ -52,3 +52,22 @@ declare namespace CourseContent {
     radio: boolean;
   }
 }
+
+declare namespace Router {
+  type Event = "navigate" | "load";
+  type Callback = (e: EventData) => void | boolean;
+
+  interface EventData {
+    path: string;
+  }
+
+  interface Listener {
+    event: Event;
+    cb: Callback;
+  }
+
+  interface Page {
+    path: string;
+    data: string;
+  }
+}
