@@ -23,7 +23,7 @@ export default Course({
         "We'll start with the fundamentals, including what Python is and why it is important."
       ),
       Page(
-        "Basics",
+        "Python basics",
 
         Header("Basics"),
 
@@ -49,22 +49,78 @@ export default Course({
 
         Fieldset(
           `page1_benefit_question`,
-          `Why is Python a good programming language to learn? Choose all options.`,
+          `Why is Python a good programming language to learn? Choose all options that apply.`,
           `Python is known to be straightforward and has easy-to-learn syntax.
           However, Python has a bad reputation on speed.
           For fast languages, C++, Java and Rust are all good options,
-          though they're less intuitive than Python and each have different uses.`,
+          though they're more difficult than Python and each have different uses.`,
           CheckBox(`It's a basic language`, true),
           CheckBox(`It's a fast language`),
-          CheckBox(`It has easy syntax.`, true)
+          CheckBox(`It has easy syntax`, true)
         )
       )
     ),
     Section(
-      "Syntax",
+      "2. A Quick Guide To Syntax",
 
-      Page("Numbers"),
-      Page("Text"),
+      Page(
+        "Numbers",
+
+        Header("Syntax: The Building Blocks of Python"),
+
+        `As we continue our guide to Python, we encounter syntax &mdash;
+        the grammar that makes up all code languages.
+        It's through syntax that we structure our programming.`,
+
+        Fieldset(
+          "syntax_question",
+          `What is syntax in programming?`,
+          `This includes rules about how to declare variables, how to call functions,
+          and how to structure control flow statements, among other things.
+          It’s what allows us to write programs that the computer can understand`,
+          RadioBox(`The color scheme of the text editor used for coding`),
+          RadioBox(`The set of rules that specifiy how programs in a programming language must be structured`, true),
+          RadioBox(`The process of finding and fixing bugs in a program`),
+          RadioBox(`The runtime at which the program runs`)
+        ),
+
+        Header("Basic Math in Python"),
+
+        `Calculations in Python are very comparable to most other programming languages.
+        When we input ${code("2 + 4 - 1")} into the shell, we get ${code("5")} as expected.
+        Similarly we can do multiplication using an asterisk like ${code("2 * 3")} getting ${code("6")},
+        as well as division using a slash: ${code("6 / 2")}.`,
+
+        Header("Exponents, parentheses and PEMDAS"),
+
+        `Exponents are done with double asteriks putting the exponent after, ${code("2 ** 4")}
+        we get the same as ${code("2*2*2*2")} outputting ${code("16")}.
+        You can also use parentheses to prioritize certain operations.
+        The result of ${code("2 + 1 * 3")} is the same as ${code("2 + 3")}, however,
+        ${code("(2 + 1) * 2")} gets calculated like ${code("3 * 2")}.
+        All math operations are ordered following PEMDAS:`,
+        OrderedList(`<b>Parentheses</b>`, `<b>Exponents</b>`, `<b>Multiplication & Division</b> (left to right)`, `<b>Addition and Subtraction</b> (left to right)`),
+        `This behaviour and syntax is mostly similar between programming languages.`, //danku robin
+
+        Header("Practice your knowledge!"),
+
+        Fieldset(
+          `math_order_1`,
+          `What is the output of ${code("4 - 2 / 2 * 3")}?`,
+          `Since there are no parentheses/exponents,
+          we perform multiplication from left to right.
+          First we have ${code("2 / 2")} which equals ${code("1")}.
+          Then we multiply this result by ${code("3")},
+          so we end up with ${code("1 * 3 = 3")}
+          So the expression becomes ${code("4 - 3")}, ending up with ${code("1")}.`,
+          RadioBox(`3`),
+          RadioBox(`4.6666...`),
+          RadioBox(`0.3333...`),
+          RadioBox(`1`, true)
+        ),
+        Fieldset(`math_order_1`, `What is the output of ${code("3 - (3 - 0.5 ** 2) * 2")}?`, ``, RadioBox(`3`), RadioBox(`4.6666...`), RadioBox(`0.3333...`), RadioBox(`1`, true)) // add answers and commentary
+      ),
+      Page("Texts"),
       Page("Lists")
     ),
   ],

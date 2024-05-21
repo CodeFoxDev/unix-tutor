@@ -96,7 +96,10 @@ export function Page(title, ...content) {
     title,
     content,
     done: false,
+    questions: 0,
+    totalScore: 0,
     render(section, page, lastInCourse, lastInPart, courseRender) {
+      this.questions = 0;
       const root = document.createElement("div");
       root.className = "page";
       const header = h(
@@ -109,9 +112,15 @@ export function Page(title, ...content) {
       for (const c of content) {
         if (typeof c === "string") root.appendChild(Paragraph(c).render());
         else root.appendChild(c.render());
+        if (c.type === "fieldset") this.questions++;
       }
 
       // check if all questions have been answered
+      const percentage = h(
+        "p",
+        { class: "correct-percentage hidden" },
+        "total score: 100 - 100%" // 0 out of 0 correct - 100%
+      );
       const doneBtn = h(
         "div",
         { role: "button", class: "button disabled" },
@@ -124,7 +133,13 @@ export function Page(title, ...content) {
           ? "Finish course"
           : `Next ${lastInPart === true ? "part" : "lesson"}`
       );
-      const wrapper = h("div", { class: "next-wrapper" }, doneBtn, nextBtn);
+      const wrapper = h(
+        "div",
+        { class: "next-wrapper" },
+        h("div", { class: "score-wrapper" }, percentage),
+        doneBtn,
+        nextBtn
+      );
       root.appendChild(wrapper);
       if (this.done === true) {
         nextBtn.classList.remove("disabled");
@@ -134,11 +149,16 @@ export function Page(title, ...content) {
       update("fieldset", () => {
         if (this.done) return;
         answered = true;
+        this.totalScore = 0;
         for (const item of content) {
           if (typeof item === "string") continue;
           if (item.type !== "fieldset") continue;
+
           if (item.answered === false) answered = false;
+          this.totalScore += item.score;
         }
+
+        // TODO: add total or average score to page
 
         if (!answered) return;
         doneBtn.classList.remove("disabled");
@@ -147,9 +167,16 @@ export function Page(title, ...content) {
       doneBtn.addEventListener("click", () => {
         if (answered === false) return;
         this.done = true;
+        // update buttons
         callUpdate("pageDone");
         doneBtn.classList.add("disabled");
         nextBtn.classList.remove("disabled");
+        // add final score / percentage
+        percentage.innerHTML = `total score: ${
+          this.totalScore
+        } points - ${Math.round(this.totalScore / this.questions)}%`;
+        percentage.classList.remove("hidden");
+        // TODO: also add percentage to the sidebar
       });
 
       nextBtn.addEventListener("click", () => {
@@ -263,16 +290,17 @@ export function Code(...items) {
     type: "paragraph",
     items,
     render() {
-      const root = h("p", { class: "code-block" });
+      const root = h("div", { class: "code-block" }, h("span", {}));
       for (const i of items) {
-        if (typeof i === "string") root.appendChild(document.createTextNode(i));
-        else root.appendChild(i.render?.());
+        if (typeof i === "string") root.firstChild.innerHTML += i;
+        else root.firstChild.appendChild(i.render?.());
       }
       return root;
     },
   };
 }
 
+// Optional
 /**
  * @param {Omit<CourseContent.Input, 'type' | 'render'>} section
  * @returns {CourseContent.Input}
@@ -338,12 +366,14 @@ export function Fieldset(id, question, feedback, ...items) {
       const root = h("fieldset", {}, h("legend", {}, question));
       const name = Math.random().toString(36).slice(2);
       for (const item of items) root.appendChild(item.render(name));
-      button.addEventListener("click", () => this.check());
+      checkEle.addEventListener("click", () => this.check());
       root.appendChild(button);
       return root;
     },
     check() {
+      if (this.answered === true) return;
       let checked = -1;
+      let radio = true;
       for (const [item, i] of iter(items)) {
         if (item.checked !== true) continue;
         if (answers.find((e) => e.id === i) !== undefined) continue;
@@ -354,24 +384,14 @@ export function Fieldset(id, question, feedback, ...items) {
         } else {
           if (checked === -1) checked = [];
           checked.push(i);
+          radio = false;
         }
       }
-      console.log(checked);
-      // TODO: implement for checkbox
       if (checked === -1 || checked.length === 0) return;
 
-      const showCorrect = () => {
-        for (const item of items) item.mark();
-        if (answers.length === 1) this.score = 100;
-        else if (
-          answers.length === 2 &&
-          answers[answers.length - 1].correct === true
-        )
-          this.score = 50;
-        else this.score = 0;
+      scoreEle.classList.add("color");
 
-        scoreEle.innerHTML = this.score;
-
+      const done = () => {
         feedbackEle.classList.remove("hidden");
         checkEle.classList.add("disabled");
         this.answered = answered = true;
@@ -379,13 +399,35 @@ export function Fieldset(id, question, feedback, ...items) {
         ID.callUpdate(id, true);
       };
 
-      answers.push({ id: checked, correct: items[checked].correct === true });
-      scoreEle.classList.add("color");
+      if (radio === true) {
+        answers.push({ id: checked, correct: items[checked].correct === true });
 
-      if (items[checked].correct === true) showCorrect();
-      else items[checked].mark();
+        items[checked].mark(true);
+        if (items[checked].correct === true || answers.length === 2) {
+          for (const item of items) item.mark();
 
-      if (answers.length === 2) showCorrect();
+          if (answers.length === 1) this.score = 100;
+          else if (
+            answers.length === 2 &&
+            answers[answers.length - 1].correct === true
+          )
+            this.score = 50;
+          else this.score = 0;
+
+          scoreEle.innerHTML = this.score;
+          done();
+        }
+      } else {
+        let correct = 0;
+        for (const item of items) {
+          const i = items.indexOf(item);
+          item.mark(checked.includes(i));
+          if (item.correct === item.checked) correct++;
+        }
+        this.score = Math.round(100 * (correct / items.length));
+        scoreEle.innerHTML = this.score;
+        done();
+      }
     },
   };
 }
@@ -436,22 +478,33 @@ export function RadioBox(text, correct) {
     radio: true,
     text,
     correct,
+    answered: false,
     get checked() {
       return ref.firstChild.checked;
     },
-    mark() {
-      if (correct === true) ref.classList.add("correct");
-      else ref.classList.add("incorrect");
+    mark(answered = false) {
+      if (this.answered === true) return;
+      if (answered == correct)
+        ref.setAttribute("data-answered-correctly", true);
+      else ref.setAttribute("data-answered-correctly", false);
+      ref.setAttribute("data-correct", correct);
+      ref.classList.add("done");
 
       ref.checked = false;
       ref.firstChild.setAttribute("disabled", true);
+      this.answered = true;
     },
     render(name) {
       const id = Math.random().toString(36).slice(2);
       ref = h(
         "div",
         { class: "input" },
-        h("input", { type: "radio", value: text, id, name }),
+        h("input", {
+          type: "radio",
+          value: text,
+          id,
+          name,
+        }),
         h("label", { for: id }, text)
       );
       return ref;
@@ -479,10 +532,22 @@ export function CheckBox(text, correct) {
     radio: false,
     text,
     correct,
+    answered: false,
     get checked() {
       return ref.firstChild.checked;
     },
-    mark() {},
+    mark(answered = false) {
+      if (this.answered === true) return;
+      if (answered === correct)
+        ref.setAttribute("data-answered-correctly", true);
+      else ref.setAttribute("data-answered-correctly", false);
+      ref.setAttribute("data-correct", correct);
+      ref.classList.add("done");
+
+      ref.checked = false;
+      ref.firstChild.setAttribute("disabled", true);
+      this.answered = true;
+    },
     render() {
       return ref;
     },

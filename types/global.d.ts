@@ -23,6 +23,8 @@ declare namespace Courses {
     title: string;
     content: (CourseContent.Content | string)[];
     done: boolean;
+    questions: number;
+    totalScore: number;
     render(): HTMLElement;
   }
 }
@@ -55,6 +57,7 @@ declare namespace CourseContent {
     question: string;
     items: Content[];
     answered: boolean;
+    score: number;
     check(): void;
     render(): HTMLElement;
   }
@@ -69,7 +72,8 @@ declare namespace CourseContent {
     text: string;
     correct: boolean;
     checked: boolean;
-    mark(): void;
+    answered: boolean;
+    mark(answered = false): void;
     render(group: string): HTMLElement;
   }
 }

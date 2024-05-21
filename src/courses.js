@@ -22,7 +22,7 @@ function load(course, section = 0, page = 0) {
 }
 
 on("load", (e) => {
-  if (e.path === "/courses/viewer") {
+  if (e.path.startsWith("/courses/viewer")) {
     const params = new URLSearchParams(e.search);
     if (e.search === "" || !params.has("course")) return navigate("/courses");
     const split = params.get("page")?.split("-") ?? ["0", "0"];

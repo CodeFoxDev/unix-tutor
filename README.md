@@ -4,7 +4,7 @@
 - [ ] Over ons (tekst, plaatjes, contactformulier) 20
 - [x] Werking menu (zichtbaar/onzichtbaar maken inhoud) 25
 - [x] Quizz met radiobuttons (incl. inline feedback) 25
-- [ ] Quizz met checkboxes (incl. inline feedback) 25
+- [x] Quizz met checkboxes (incl. inline feedback) 25
 - [ ] Quizz met pull-down (incl. inline feedback) 25
 - [ ] Totaal goede & foute antwoorden 25
 - [ ] Percentage goede en foute antwoorden 25
