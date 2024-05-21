@@ -62,7 +62,25 @@ export default Course({
           `The ${code("commit")} command creates a new commit in your repository. A commit acts as a snapshot of your project, which git stores. Later, if your code stopped working, you can revert back to this snapshot and revert changes made after this commit.
           To be able to distingiush commits from each other, every commit includes a message, in this message you should ideally briefly describe the changes you've made. The command looks like this;`,
           Code(`git commit -m <message>`),
-          `Where ${code("&lt;message&gt;")} is a string that describes the changes you've made.`
+          `In this example, ${code("&lt;message&gt;")} is a string that describes the changes you've made. <br>`,
+          `For example;`,
+          Code(`git commit -m "Changed speed settings and added background."`),
+
+          Header(`${code("status")}`),
+          `The ${code("status")} command displays paths that are different from the index file and the current most recent commit.
+          It also displays paths that have differences between the working tree and the index file, and paths in the working tree that are note tracked by git.`,
+          `The use of the ${code("status")} is very simple; <br>`,
+          Code(`git status`),
+          "Output:",
+          Code(`On branch main \n
+                Your branch is up to date with 'origin/main'. <br>
+          <br>
+                Changes not staged for commit:
+                  (use "git add <file>..." to update what will be committed) <br>
+                  (use "git restore <file>..." to discard changes in working directory) <br>
+                        modified:   src/data/git.data.js`)
+
+
         )
       ),
 
