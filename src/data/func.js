@@ -263,7 +263,7 @@ export function Code(...items) {
     type: "paragraph",
     items,
     render() {
-      const root = h("code", { class: "block" });
+      const root = h("p", { class: "code-block" });
       for (const i of items) {
         if (typeof i === "string") root.appendChild(document.createTextNode(i));
         else root.appendChild(i.render?.());
@@ -301,7 +301,7 @@ export function Dropdown(section) {
  * @param {string} id
  * @param {string} question
  * @param {string} feedback
- * @param {CourseContent.Content[]} items
+ * @param {CourseContent.MultipleChoice[]} items
  * @returns {CourseContent.Fieldset}
  */
 export function Fieldset(id, question, feedback, ...items) {
@@ -313,11 +313,19 @@ export function Fieldset(id, question, feedback, ...items) {
     { class: "feedback hidden" },
     `Explaination: ${feedback}`
   );
+  const scoreEle = h("div", { role: "button", class: "button score" }, "0");
+  const checkEle = h(
+    "div",
+    { role: "button", class: "button" },
+    "Check answer"
+  );
+
   const button = h(
     "div",
     { class: "btn-wrapper" },
     feedbackEle,
-    h("div", { role: "button", class: "button" }, "Check answer")
+    checkEle,
+    scoreEle
   );
 
   return {
@@ -325,6 +333,7 @@ export function Fieldset(id, question, feedback, ...items) {
     question,
     items,
     answered,
+    score: 0,
     render() {
       const root = h("fieldset", {}, h("legend", {}, question));
       const name = Math.random().toString(36).slice(2);
@@ -335,36 +344,48 @@ export function Fieldset(id, question, feedback, ...items) {
     },
     check() {
       let checked = -1;
-      // TODO: dont't count already wrong answer
       for (const [item, i] of iter(items)) {
-        if (!item.ref?.firstChild?.checked === true) continue;
-        checked = i;
-        break;
+        if (item.checked !== true) continue;
+        if (answers.find((e) => e.id === i) !== undefined) continue;
+
+        if (item.radio === true) {
+          checked = i;
+          break;
+        } else {
+          if (checked === -1) checked = [];
+          checked.push(i);
+        }
       }
-      if (checked === -1) return;
+      console.log(checked);
+      // TODO: implement for checkbox
+      if (checked === -1 || checked.length === 0) return;
 
       const showCorrect = () => {
-        for (const item of items) {
-          item.ref.firstChild.setAttribute("disabled", true);
-          if (item.correct === true) item.ref.classList.add("correct");
-        }
+        for (const item of items) item.mark();
+        if (answers.length === 1) this.score = 100;
+        else if (
+          answers.length === 2 &&
+          answers[answers.length - 1].correct === true
+        )
+          this.score = 50;
+        else this.score = 0;
+
+        scoreEle.innerHTML = this.score;
 
         feedbackEle.classList.remove("hidden");
-        button.lastChild.classList.add("disabled");
+        checkEle.classList.add("disabled");
         this.answered = answered = true;
         callUpdate("fieldset");
         ID.callUpdate(id, true);
       };
 
-      if (items[checked].correct === true) showCorrect();
-      else {
-        items[checked].ref.classList.add("incorrect");
-        items[checked].ref.checked = false;
-        items[checked].ref.firstChild.setAttribute("disabled", true);
-      }
+      answers.push({ id: checked, correct: items[checked].correct === true });
+      scoreEle.classList.add("color");
 
-      tries++;
-      if (tries === 2) showCorrect();
+      if (items[checked].correct === true) showCorrect();
+      else items[checked].mark();
+
+      if (answers.length === 2) showCorrect();
     },
   };
 }
@@ -407,20 +428,33 @@ export function Image(url) {
  */
 export function RadioBox(text, correct) {
   correct ??= false;
+  /** @type {HTMLElement} */
+  let ref;
+
   return {
     type: "multipleChoice",
     radio: true,
     text,
     correct,
+    get checked() {
+      return ref.firstChild.checked;
+    },
+    mark() {
+      if (correct === true) ref.classList.add("correct");
+      else ref.classList.add("incorrect");
+
+      ref.checked = false;
+      ref.firstChild.setAttribute("disabled", true);
+    },
     render(name) {
       const id = Math.random().toString(36).slice(2);
-      this.ref = h(
+      ref = h(
         "div",
         { class: "input" },
         h("input", { type: "radio", value: text, id, name }),
         h("label", { for: id }, text)
       );
-      return this.ref;
+      return ref;
     },
   };
 }
@@ -432,19 +466,25 @@ export function RadioBox(text, correct) {
  */
 export function CheckBox(text, correct) {
   correct ??= false;
+  const id = Math.random().toString(36).slice(2);
+  let ref = h(
+    "div",
+    { class: "input" },
+    h("input", { type: "checkbox", value: text, id }),
+    h("label", { for: id }, text)
+  );
+
   return {
     type: "multipleChoice",
     radio: false,
     text,
     correct,
+    get checked() {
+      return ref.firstChild.checked;
+    },
+    mark() {},
     render() {
-      this.ref = h(
-        "div",
-        {},
-        h("input", { type: "checkbox" }),
-        h("label", {}, text)
-      );
-      return this.ref;
+      return ref;
     },
   };
 }

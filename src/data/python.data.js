@@ -34,8 +34,8 @@ export default Course({
         Python has a large array of functions, that supports many of your programming needs.
         What's more, Python has a large community,
         which means you'll be able to find resources and help very easily`,
-      
-        Header('Quiz Time!'),
+
+        Header("Quiz Time!"),
 
         Fieldset(
           `page1_what_question`,
@@ -43,7 +43,7 @@ export default Course({
           `While Python is indeed a snake species,
           in this context, we're referring to Python as the programming language`,
           RadioBox(`a snake species`),
-          RadioBox(`a programming language`),
+          RadioBox(`a programming language`, true),
           RadioBox(`an IDE (integrated development environment)`)
         ),
 
@@ -54,24 +54,18 @@ export default Course({
           However, Python has a bad reputation on speed.
           For fast languages, C++, Java and Rust are all good options,
           though they're less intuitive than Python and each have different uses.`,
-          CheckBox(`It's a basic language`),
+          CheckBox(`It's a basic language`, true),
           CheckBox(`It's a fast language`),
-          CheckBox(`It has easy syntax.`)
+          CheckBox(`It has easy syntax.`, true)
         )
-      ),
+      )
     ),
     Section(
       "Syntax",
 
-      Page(
-        "Numbers"
-      ),
-      Page(
-        "Text"
-      ),
-      Page(
-        "Lists"
-      )
-    )
+      Page("Numbers"),
+      Page("Text"),
+      Page("Lists")
+    ),
   ],
 });

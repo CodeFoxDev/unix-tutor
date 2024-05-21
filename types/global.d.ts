@@ -7,7 +7,7 @@ declare namespace Courses {
     sections: Section[];
 
     insertSidebar(): void;
-    render(section: number, page: number): void;
+    render(section: number, page: number): HTMLElement;
   }
 
   interface Section {
@@ -23,14 +23,14 @@ declare namespace Courses {
     title: string;
     content: (CourseContent.Content | string)[];
     done: boolean;
-    render(): Element;
+    render(): HTMLElement;
   }
 }
 
 declare namespace CourseContent {
   interface Content {
     type: string;
-    render(): Element;
+    render(): HTMLElement;
   }
 
   interface Header extends Content {
@@ -41,6 +41,7 @@ declare namespace CourseContent {
     type: "paragraph";
     text: string;
   }
+  // Optional
   interface Input extends Content {
     type: "input";
   }
@@ -54,19 +55,22 @@ declare namespace CourseContent {
     question: string;
     items: Content[];
     answered: boolean;
-    render(): void;
     check(): void;
+    render(): HTMLElement;
   }
   interface Conditional extends Content {
     type: "conditional";
     shown: boolean;
-    render(): void;
+    render(): HTMLElement;
   }
   interface MultipleChoice extends Content {
     type: "multipleChoice";
     radio: boolean;
     text: string;
     correct: boolean;
+    checked: boolean;
+    mark(): void;
+    render(group: string): HTMLElement;
   }
 }
 

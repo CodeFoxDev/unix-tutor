@@ -133,6 +133,7 @@ nav {
   display: flex;
   align-items: center;
   justify-content: center;
+  height: 3.5rem;
   padding: 0.8rem 1.5rem;
   background: var(--accent);
   border-radius: 0.5rem;
@@ -259,7 +260,7 @@ main.course-viewer {
     width: 80rem;
     display: flex;
     gap: 2rem;
-    margin-inline: 2rem;
+    margin-inline: 2rem 0;
 
     & .sidebar {
       width: 20rem;
@@ -307,6 +308,7 @@ main.course-viewer {
           color: var(--text);
         }
 
+        /* TODO: add checkmark */
         &::after {
           content: "";
           margin-left: auto;
@@ -325,6 +327,8 @@ main.course-viewer {
 
     & .page {
       width: 100%;
+      overflow: auto;
+      padding-right: 2rem;
 
       & .title {
         border-bottom: 2px solid var(--border);
@@ -341,6 +345,11 @@ main.course-viewer {
           font-size: 0.8em;
           color: var(--inactive);
         }
+      }
+
+      & .button.score {
+        height: 3.5rem;
+        width: 3.5rem;
       }
 
       & .next-wrapper {
@@ -370,7 +379,8 @@ main.course-viewer {
         padding: 1rem 0 0.5rem;
       }
 
-      & code.block {
+      & code.block,
+      & .code-block {
         display: block;
         background: var(--code);
         padding: 1rem;
@@ -410,6 +420,10 @@ main.course-viewer {
 
             &[type="radio"] {
               border-radius: 1rem;
+            }
+
+            &[type="checkbox"] {
+              border-radius: 0.2rem;
             }
 
             &:checked {
@@ -479,6 +493,16 @@ main.course-viewer {
             flex-shrink: 0;
             transition: background;
 
+            &.color {
+              background: var(--accent);
+            }
+
+            &.score {
+              &::after {
+                background: transparent !important;
+              }
+            }
+
             &::after {
               background: transparent;
             }
@@ -492,7 +516,7 @@ main.course-viewer {
           cursor: pointer;
           background: var(--accent);
 
-          &::after {
+          &:not(.color)::after {
             background: repeating-linear-gradient(
               315deg,
               var(--accent),
