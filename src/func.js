@@ -342,18 +342,6 @@ export function Input(section) {
   };
 }
 
-/**
- * @param {Omit<CourseContent.Dropdown, 'type' | 'render'>} section
- * @returns {CourseContent.Dropdown}
- */
-export function Dropdown(section) {
-  return {
-    ...section,
-    placeholder: section.placeholder ?? section.options[0],
-    type: "dropdown",
-  };
-}
-
 // TODO: maybe change to object
 /**
  * @param {string} id
@@ -403,6 +391,7 @@ export function Fieldset(id, question, feedback, ...items) {
       if (this.answered === true) return;
       let checked = -1;
       let radio = true;
+      // different behaviour if dropdown
       for (const [item, i] of iter(items)) {
         if (item.checked !== true) continue;
         if (
@@ -600,6 +589,28 @@ export function CheckBox(text, correct) {
     },
     render() {
       return ref;
+    },
+  };
+}
+
+/**
+ * @param {number} correctIndex
+ * @param {string[]} options
+ * @returns {CourseContent.Dropdown}
+ */
+export function Dropdown(correctIndex, ...options) {
+  return {
+    type: "dropdown",
+    options,
+    score: 0,
+    answered: false,
+    correct: options[correctIndex],
+    render() {
+      const id = Math.random().toString(36).slice(2);
+      const select = h("select", { id });
+      const root = h("label", { class: "dropdown code", for: id }, select);
+      for (const i of options) select.appendChild(h("option", { value: i }, i));
+      return root;
     },
   };
 }

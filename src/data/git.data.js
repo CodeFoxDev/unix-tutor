@@ -112,13 +112,27 @@ export default Course({
 
         Fieldset(
           "git_create_new_folder",
+          //
           `How would you create the new folder for you project?`,
           `You can't use commas in this command, so the second one is wrong. 
           But the third one is a bit sneaky, ${code("$_")} is a special parameter that holds the last argument of the previous command.
           However, I never explained that, but remember, you can only learn from mistakes.`,
+          //
           CheckBox(`${code("mkdir my_project && cd my_project")}`, true),
           CheckBox(`${code("mkdir my_project, cd my_project")}`),
           CheckBox(`${code(`mkdir my_project && cd "$_"`)}`, true)
+        ),
+
+        // dropdown that asks what command to use to create a new git repo
+        // they should know to call git --help to find a command that fits
+
+        Fieldset(
+          "git_initialize_new_repo",
+          //
+          "Which command would you use to create a new git repository",
+          ``,
+          //
+          Dropdown(3, "git create", "git new", "git clone", "git init")
         ),
 
         Header("Initializing the git repository"),

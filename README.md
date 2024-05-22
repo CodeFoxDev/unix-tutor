@@ -6,8 +6,8 @@
 - [x] Quizz met radiobuttons (incl. inline feedback) 25
 - [x] Quizz met checkboxes (incl. inline feedback) 25
 - [ ] Quizz met pull-down (incl. inline feedback) 25
-- [ ] Totaal goede & foute antwoorden 25
-- [ ] Percentage goede en foute antwoorden 25
+- [x] Totaal goede & foute antwoorden 25
+- [x] Percentage goede en foute antwoorden 25
 - [x] Aftrek per ontbrekende tutorial pagina -40 (hebben we niet)
 - [ ] HTML code (werking, inspringen, commentaar, etc) 10
 - [ ] CSS code (werking, inspringen, commentaar, etc) 10

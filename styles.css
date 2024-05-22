@@ -517,6 +517,45 @@ main.course-viewer {
           }
         }
 
+        & .dropdown {
+          display: flex;
+          height: 3.5rem;
+          width: 14rem;
+          border-radius: 0.5rem;
+          border: 2px solid var(--border);
+          align-items: center;
+          justify-content: center;
+          position: relative;
+
+          & select {
+            font-size: 1em;
+            width: 14rem;
+            height: 3.5rem;
+            padding: 0;
+            color: var(--text);
+            outline: none;
+            border: none;
+            background: transparent;
+            appearance: none;
+            padding-left: 1rem;
+          }
+
+          &.code,
+          &.code select {
+            font-family: "Fira Code", monospace;
+          }
+
+          &::after {
+            /* stylelint-disable-next-line font-family-no-missing-generic-family-keyword */
+            font-family: "Material Symbols Rounded";
+            content: "\e313";
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            translate: 0 -50%;
+          }
+        }
+
         & .btn-wrapper {
           width: 100%;
           display: flex;

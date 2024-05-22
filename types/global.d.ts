@@ -48,11 +48,6 @@ declare namespace CourseContent {
   interface Input extends Content {
     type: "input";
   }
-  interface Dropdown extends Content {
-    type: "dropdown";
-    placeholder?: string;
-    options: string[];
-  }
   interface Fieldset extends Content {
     type: "fieldset";
     question: string;
@@ -68,6 +63,14 @@ declare namespace CourseContent {
     shown: boolean;
     render(): HTMLElement;
     load(): void;
+  }
+  interface Dropdown extends Content {
+    type: "dropdown";
+    options: string[];
+    correct: string;
+    score: number;
+    answered: boolean;
+    render(): HTMLElement;
   }
   interface MultipleChoice extends Content {
     type: "multipleChoice";

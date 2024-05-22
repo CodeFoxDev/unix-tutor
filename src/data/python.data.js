@@ -21,7 +21,7 @@ export default Course({
         Whether you are a complete beginner to programming or looking to polish your skills, this course will guide you with the knowledge to get started in Python.`,
 
         "We'll start with the fundamentals, including what Python is and why it is important.",
-        
+
         `(Install Python with ${link("https://www.python.org/", "this link")}, then head over to the next page.`
       ),
       Page(
@@ -147,8 +147,10 @@ export default Course({
 
         Fieldset(
           `string_addition_question`,
-          `Don't forget spaces when adding strings! You won't get an error by adding number strings *${code(`'letters` + '123')}, however, you can't add regular numbers to strings (not allowed: ${code(`'string' + 123`)})`
           `What is the output of ${code(`'It is May' + '22' + 'nd'`)}`,
+          `Don't forget spaces when adding strings! You won't get an error by adding number strings *${code(
+            `'letters` + "123"
+          )}, however, you can't add regular numbers to strings (not allowed: ${code(`'string' + 123`)})`,
           RadioBox(`It is May 22nd`),
           RadioBox(`'it is may 22nd'`),
           RadioBox(`It is May22nd`, true),
@@ -156,17 +158,15 @@ export default Course({
         ),
 
         Conditional(
-          `string_addition_question`,
+          `string_addition_question`
 
-          Fieldset(
-            `string_multiplication_question`
-          ),
-          
-          Conditional (
+          //Fieldset(`string_multiplication_question`),
+
+          /* Conditional(
             `string_multiplication_question`,
 
             Header(`String indexing`)
-          )
+          ) */
         )
       ),
       Page("Lists")
