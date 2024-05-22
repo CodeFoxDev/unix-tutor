@@ -1,5 +1,6 @@
-import { h } from "../element.js";
-import { navigate } from "../router.js";
+import { h } from "./element.js";
+import { navigate } from "./router.js";
+import { getQuestionData, setQuestionData } from "./state.js";
 
 // TODO: safe progress in localStorage, or at least between pages
 
@@ -158,8 +159,6 @@ export function Page(title, ...content) {
           this.totalScore += item.score;
         }
 
-        // TODO: add total or average score to page
-
         if (!answered) return;
         doneBtn.classList.remove("disabled");
       });
@@ -177,6 +176,7 @@ export function Page(title, ...content) {
         } points - ${Math.round(this.totalScore / this.questions)}%`;
         percentage.classList.remove("hidden");
         // TODO: also add percentage to the sidebar
+        // TODO: also save this
       });
 
       nextBtn.addEventListener("click", () => {
@@ -188,6 +188,9 @@ export function Page(title, ...content) {
       });
 
       return root;
+    },
+    load() {
+      // call load hooks on Fieldset and Conditional blocks
     },
   };
 }
@@ -334,7 +337,6 @@ export function Dropdown(section) {
  */
 export function Fieldset(id, question, feedback, ...items) {
   let answers = [];
-  let answered = false;
   let tries = 0;
   const feedbackEle = h(
     "p",
@@ -360,7 +362,7 @@ export function Fieldset(id, question, feedback, ...items) {
     type: "fieldset",
     question,
     items,
-    answered,
+    answered: false,
     score: 0,
     render() {
       const root = h("fieldset", {}, h("legend", {}, question));
@@ -376,7 +378,11 @@ export function Fieldset(id, question, feedback, ...items) {
       let radio = true;
       for (const [item, i] of iter(items)) {
         if (item.checked !== true) continue;
-        if (answers.find((e) => e.id === i) !== undefined) continue;
+        if (
+          item.radio === true &&
+          answers.find((e) => e.id === i) !== undefined
+        )
+          continue;
 
         if (item.radio === true) {
           checked = i;
@@ -394,13 +400,23 @@ export function Fieldset(id, question, feedback, ...items) {
       const done = () => {
         feedbackEle.classList.remove("hidden");
         checkEle.classList.add("disabled");
-        this.answered = answered = true;
+        this.answered = true;
         callUpdate("fieldset");
         ID.callUpdate(id, true);
+        // save progress
+        setQuestionData(id, {
+          answered: true,
+          score: this.score,
+          answers: [],
+        });
       };
 
       if (radio === true) {
-        answers.push({ id: checked, correct: items[checked].correct === true });
+        answers.push({
+          id: checked,
+          try: answers.length,
+          correct: items[checked].correct === true,
+        });
 
         items[checked].mark(true);
         if (items[checked].correct === true || answers.length === 2) {
@@ -428,6 +444,13 @@ export function Fieldset(id, question, feedback, ...items) {
         scoreEle.innerHTML = this.score;
         done();
       }
+    },
+    load() {
+      const data = getQuestionData(id);
+      if (!data) return;
+      if (!data.answered) return;
+      this.answered = true;
+      this.score = data.score;
     },
   };
 }

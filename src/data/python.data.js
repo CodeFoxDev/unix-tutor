@@ -1,4 +1,4 @@
-import { Course, Section, Page, Header, List, OrderedList, Image, Input, Dropdown, RadioBox, CheckBox, Fieldset, Conditional, Code } from "./func.js";
+import { Course, Section, Page, Header, List, OrderedList, Image, Input, Dropdown, RadioBox, CheckBox, Fieldset, Conditional, Code } from "../func.js";
 
 const code = (e) => `<code class="inline">${e}</code>`;
 const link = (e, link) => `<a class="inline link" target="_blank" href="${link}">${e}</a>`;

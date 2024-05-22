@@ -26,6 +26,7 @@ declare namespace Courses {
     questions: number;
     totalScore: number;
     render(): HTMLElement;
+    load(): void;
   }
 }
 
@@ -60,11 +61,13 @@ declare namespace CourseContent {
     score: number;
     check(): void;
     render(): HTMLElement;
+    load(): void;
   }
   interface Conditional extends Content {
     type: "conditional";
     shown: boolean;
     render(): HTMLElement;
+    load(): void;
   }
   interface MultipleChoice extends Content {
     type: "multipleChoice";
@@ -95,5 +98,13 @@ declare namespace Router {
   interface Page {
     path: string;
     data: string;
+  }
+}
+
+declare namespace State {
+  interface Question {
+    score: number;
+    answered: boolean;
+    answers: [];
   }
 }

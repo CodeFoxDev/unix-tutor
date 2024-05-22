@@ -1,4 +1,4 @@
-import { Course, Section, Page, Header, List, OrderedList, Image, Input, Dropdown, RadioBox, CheckBox, Fieldset, Conditional, Code } from "./func.js";
+import { Course, Section, Page, Header, List, OrderedList, Image, Input, Dropdown, RadioBox, CheckBox, Fieldset, Conditional, Code } from "../func.js";
 
 const code = (e) => `<code class="inline">${e}</code>`;
 const link = (e, link) => `<a class="inline link" target="_blank" href="${link}">${e}</a>`;
@@ -38,7 +38,7 @@ export default Course({
         `This question is quite tricky, but use your intuition and you might get it right!`,
 
         Fieldset(
-          "page1_commit_question",
+          "git_page_commit_question",
           `What is the purpose of the ${code("commit")} command?`,
           "Before committing files, you are adding all of the changed files. Once you commit, you basically tell git that these changes are final and that they should be saved as a snapshot of your project.",
           RadioBox(`${code("commit")} can be used to log your changes`, true),
@@ -46,7 +46,7 @@ export default Course({
           RadioBox(`${code("commit")} can be used to synchronize your code with other people`)
         ),
         Conditional(
-          "page1_commit_question",
+          "git_page_commit_question",
           Header("Basic git commands"),
           "In the realm of Git, a handful of commands are utilized far more frequently than others.",
           `These commands include: ${code("add")}, ${code("commit")}, and ${code("status")}. <br>`,
@@ -111,7 +111,7 @@ export default Course({
         `So knowing that, how would you create the new folder for you project?`,
 
         Fieldset(
-          "",
+          "git_create_new_folder",
           `How would you create the new folder for you project?`,
           `You can't use commas in this command, so the second one is wrong. 
           But the third one is a bit sneaky, ${code("$_")} is a special parameter that holds the last argument of the previous command.
