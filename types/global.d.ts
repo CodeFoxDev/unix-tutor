@@ -107,4 +107,10 @@ declare namespace State {
     answered: boolean;
     answers: [];
   }
+
+  interface Page {
+    score: number;
+    questions: Question[];
+    done: boolean;
+  }
 }

@@ -1,6 +1,12 @@
 import { h } from "./element.js";
 import { navigate } from "./router.js";
-import { getQuestionData, setQuestionData } from "./state.js";
+import {
+  getPageData,
+  getPageState,
+  getQuestionData,
+  setPageState,
+  setQuestionData,
+} from "./state.js";
 
 // TODO: safe progress in localStorage, or at least between pages
 
@@ -29,6 +35,14 @@ export function Course(course) {
         sections.appendChild(h("p", { class: "section-header" }, sec.name));
 
         for (const page of sec.pages) {
+          const ci = course.sections.indexOf(sec);
+          const pi = sec.pages.indexOf(page);
+          const pageState = getPageState(course, ci, pi);
+
+          let hasQuestions = false;
+          for (const c of page.content)
+            if (c.type === "fieldset") hasQuestions = true;
+
           const button = h(
             "div",
             {
@@ -36,16 +50,28 @@ export function Course(course) {
               id: `btn${course.sections.indexOf(sec)}-${sec.pages.indexOf(
                 page
               )}`,
+              "data-score": "0%",
             },
             h("p", {}, page.title)
           );
+
+          if (!hasQuestions) button.setAttribute("data-score", "");
+
           update("pageDone", () => {
             if (page.done === true) button.classList.add("done");
+            if (!hasQuestions || !page.done) return;
+            let score = page.totalScore / page.questions;
+            if (isNaN(score)) score = 0;
+
+            button.setAttribute("data-score", `${Math.round(score)}%`);
+            setPageState(course, ci, pi, {
+              done: true,
+              questions: page.questions,
+              score: page.totalScore,
+            });
           });
           sections.appendChild(button);
           button.addEventListener("click", () => {
-            const ci = course.sections.indexOf(sec);
-            const pi = sec.pages.indexOf(page);
             this.render(ci, pi, course.sections.length, sec.pages.length);
           });
         }
@@ -189,8 +215,9 @@ export function Page(title, ...content) {
 
       return root;
     },
-    load() {
+    load(course, section, page) {
       // call load hooks on Fieldset and Conditional blocks
+      const state = getPageState(course, section, page);
     },
   };
 }
