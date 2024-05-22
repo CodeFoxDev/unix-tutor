@@ -20,7 +20,9 @@ export default Course({
         This course is made for anyone interested in learning Python, a powerful and commonly used programming language.
         Whether you are a complete beginner to programming or looking to polish your skills, this course will guide you with the knowledge to get started in Python.`,
 
-        "We'll start with the fundamentals, including what Python is and why it is important."
+        "We'll start with the fundamentals, including what Python is and why it is important.",
+        
+        `(Install Python with ${link("https://www.python.org/", "this link")}, then head over to the next page.`
       ),
       Page(
         "Python basics",
@@ -100,7 +102,7 @@ export default Course({
         ${code("(2 + 1) * 2")} gets calculated like ${code("3 * 2")}.
         All math operations are ordered following PEMDAS:`,
         OrderedList(`<b>Parentheses</b>`, `<b>Exponents</b>`, `<b>Multiplication & Division</b> (left to right)`, `<b>Addition and Subtraction</b> (left to right)`),
-        `This behaviour and syntax is mostly similar between programming languages.`, //danku robin
+        `This behaviour is mostly similar between programming languages.`,
 
         Header("Practice your knowledge!"),
 
@@ -118,9 +120,55 @@ export default Course({
           RadioBox(`0.3333...`),
           RadioBox(`1`, true)
         ),
-        Fieldset(`math_order_1`, `What is the output of ${code("3 - (3 - 0.5 ** 2) * 2")}?`, ``, RadioBox(`3`), RadioBox(`4.6666...`), RadioBox(`0.3333...`), RadioBox(`1`, true)) // add answers and commentary
+        Fieldset(
+          `math_order_1`,
+          `What is the output of ${code("10 - (5 - 2 ** 2) * 2")}?`,
+          `First we need to solve everything within the parentheses (${code("5 - 2 ** 2")}),
+          exponentation comes before subtraction,
+          so the equation within the parentheses becomes ${code("5 - 4")}, which equals ${code("1")}
+          the new equation becomes ${code("10 - 1 * 2")},
+          after multiplying first we get ${code("10 - 2")}, getting our answer ${code("8")}`,
+          RadioBox(`8`, true),
+          RadioBox(`2`),
+          RadioBox(`-8`),
+          RadioBox(`-3`)
+        )
       ),
-      Page("Texts"),
+      Page(
+        "Texts",
+
+        Header("Strings"),
+
+        `Python can use text in string types.
+        Strings can be assigned with single quotes (${code(`'This is a string!'`)}),
+        and double quotes (${code(`"This is also a string!"`)}).
+        You can also add and multiply strings using the +-operator and *-operator.
+        Strings can contain letters, numbers and most Unicode and ASCII characters.`,
+
+        Fieldset(
+          `string_addition_question`,
+          `Don't forget spaces when adding strings! You won't get an error by adding number strings *${code(`'letters` + '123')}, however, you can't add regular numbers to strings (not allowed: ${code(`'string' + 123`)})`
+          `What is the output of ${code(`'It is May' + '22' + 'nd'`)}`,
+          RadioBox(`It is May 22nd`),
+          RadioBox(`'it is may 22nd'`),
+          RadioBox(`It is May22nd`, true),
+          RadioBox(`TypeError: can only concatenate str (not "int") to str`)
+        ),
+
+        Conditional(
+          `string_addition_question`,
+
+          Fieldset(
+            `string_multiplication_question`
+          ),
+          
+          Conditional (
+            `string_multiplication_question`,
+
+            Header(`String indexing`)
+          )
+        )
+      ),
       Page("Lists")
     ),
   ],
