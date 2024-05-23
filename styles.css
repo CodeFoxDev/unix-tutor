@@ -545,9 +545,10 @@ main.course-viewer {
             font-family: "Fira Code", monospace;
           }
 
-          &::after {
+          &::before {
             /* stylelint-disable-next-line font-family-no-missing-generic-family-keyword */
             font-family: "Material Symbols Rounded";
+            pointer-events: none;
             content: "\e313";
             position: absolute;
             right: 1rem;
@@ -596,6 +597,7 @@ main.course-viewer {
           }
         }
 
+        & .dropdown ~ .btn-wrapper .button:not(.done, .disabled),
         &
           div.input:has(input:not([disabled]):checked)
           ~ .btn-wrapper

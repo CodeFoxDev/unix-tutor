@@ -67,13 +67,15 @@ declare namespace CourseContent {
   interface Dropdown extends Content {
     type: "dropdown";
     options: string[];
+    selected: string;
     correct: string;
     score: number;
     answered: boolean;
     render(): HTMLElement;
+    load(data: string): void;
   }
   interface MultipleChoice extends Content {
-    type: "multipleChoice";
+    type: "radiobox" | "checkbox";
     radio: boolean;
     text: string;
     correct: boolean;

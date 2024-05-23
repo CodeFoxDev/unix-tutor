@@ -37,7 +37,7 @@ export function Course(course) {
         for (const page of sec.pages) {
           const ci = course.sections.indexOf(sec);
           const pi = sec.pages.indexOf(page);
-          const pageState = getPageState(course, ci, pi);
+          const pageState = getPageState(course.id, ci, pi);
 
           let hasQuestions = false;
           for (const c of page.content)
@@ -55,20 +55,36 @@ export function Course(course) {
             h("p", {}, page.title)
           );
 
+          if (pageState?.done === true) button.classList.add("done");
+          if (pageState?.score !== undefined && pageState.questions > 0) {
+            const score = pageState.score / pageState.questions;
+            if (isNaN(score)) score = 0;
+            button.setAttribute("data-score", `${Math.round(score)}%`);
+          }
+
           if (!hasQuestions) button.setAttribute("data-score", "");
 
           update("pageDone", () => {
             if (page.done === true) button.classList.add("done");
-            if (!hasQuestions || !page.done) return;
-            let score = page.totalScore / page.questions;
-            if (isNaN(score)) score = 0;
+            if (!page.done) return;
 
-            button.setAttribute("data-score", `${Math.round(score)}%`);
-            setPageState(course, ci, pi, {
-              done: true,
-              questions: page.questions,
-              score: page.totalScore,
-            });
+            if (hasQuestions) {
+              let score = page.totalScore / page.questions;
+              if (isNaN(score)) score = 0;
+
+              button.setAttribute("data-score", `${Math.round(score)}%`);
+              setPageState(course.id, ci, pi, {
+                done: true,
+                questions: page.questions,
+                score: page.totalScore,
+              });
+            } else {
+              setPageState(course.id, ci, pi, {
+                done: true,
+                questions: 0,
+                score: 0,
+              });
+            }
           });
           sections.appendChild(button);
           button.addEventListener("click", () => {
@@ -94,6 +110,9 @@ export function Course(course) {
           this.render(ci, pi, sections, parts);
         }
       );
+
+      course.sections[section]?.pages[page]?.load?.(course.id, section, page);
+
       if (!rendered) return;
       const outlet = document.querySelector("#viewer-outlet");
       if (!outlet) return;
@@ -119,6 +138,15 @@ export function Course(course) {
  * @returns {Courses.Page}
  */
 export function Page(title, ...content) {
+  /** @type {HTMLElement} */
+  let percentage;
+  /** @type {HTMLElement} */
+  let doneBtn;
+  /** @type {HTMLElement} */
+  let nextBtn;
+  /** @type {HTMLElement} */
+  let wrapper;
+
   return {
     title,
     content,
@@ -143,24 +171,24 @@ export function Page(title, ...content) {
       }
 
       // check if all questions have been answered
-      const percentage = h(
+      percentage = h(
         "p",
         { class: "correct-percentage hidden" },
         "total score: 100 - 100%" // 0 out of 0 correct - 100%
       );
-      const doneBtn = h(
+      doneBtn = h(
         "div",
         { role: "button", class: "button disabled" },
         "Mark as done"
       );
-      const nextBtn = h(
+      nextBtn = h(
         "div",
         { role: "button", class: "button disabled" },
         lastInCourse
           ? "Finish course"
           : `Next ${lastInPart === true ? "part" : "lesson"}`
       );
-      const wrapper = h(
+      wrapper = h(
         "div",
         { class: "next-wrapper" },
         h("div", { class: "score-wrapper" }, percentage),
@@ -196,6 +224,7 @@ export function Page(title, ...content) {
         callUpdate("pageDone");
         doneBtn.classList.add("disabled");
         nextBtn.classList.remove("disabled");
+        if (this.questions === 0) return;
         // add final score / percentage
         percentage.innerHTML = `total score: ${
           this.totalScore
@@ -218,6 +247,25 @@ export function Page(title, ...content) {
     load(course, section, page) {
       // call load hooks on Fieldset and Conditional blocks
       const state = getPageState(course, section, page);
+      if (!state) return;
+
+      for (const c of content) {
+        if (c.type === "fieldset") c.load?.();
+      }
+
+      if (state.done === true) {
+        this.done = true;
+        // also update sidebar
+        doneBtn.classList.add("disabled");
+        nextBtn.classList.remove("disabled");
+        if (this.questions > 0) {
+          // add final score / percentage
+          percentage.innerHTML = `total score: ${
+            state.score
+          } points - ${Math.round(state.score / this.questions)}%`;
+          percentage.classList.remove("hidden");
+        }
+      }
     },
   };
 }
@@ -373,6 +421,9 @@ export function Fieldset(id, question, feedback, ...items) {
     scoreEle
   );
 
+  /** @type {'dropdown' | 'radiobox' | 'checkbox'} */
+  let contentType;
+
   return {
     type: "fieldset",
     question,
@@ -382,7 +433,11 @@ export function Fieldset(id, question, feedback, ...items) {
     render() {
       const root = h("fieldset", {}, h("legend", {}, question));
       const name = Math.random().toString(36).slice(2);
-      for (const item of items) root.appendChild(item.render(name));
+      for (const item of items) {
+        if (!contentType) contentType = item.type;
+        else if (contentType !== item.type) continue;
+        root.appendChild(item.render(name));
+      }
       checkEle.addEventListener("click", () => this.check());
       root.appendChild(button);
       return root;
@@ -391,6 +446,7 @@ export function Fieldset(id, question, feedback, ...items) {
       if (this.answered === true) return;
       let checked = -1;
       let radio = true;
+      if (contentType === "dropdown") return this.checkDrop();
       // different behaviour if dropdown
       for (const [item, i] of iter(items)) {
         if (item.checked !== true) continue;
@@ -423,26 +479,19 @@ export function Fieldset(id, question, feedback, ...items) {
         setQuestionData(id, {
           answered: true,
           score: this.score,
-          answers: [],
+          answers: answers ?? [],
         });
       };
 
       if (radio === true) {
-        answers.push({
-          id: checked,
-          try: answers.length,
-          correct: items[checked].correct === true,
-        });
+        answers.push(checked);
 
         items[checked].mark(true);
         if (items[checked].correct === true || answers.length === 2) {
           for (const item of items) item.mark();
 
           if (answers.length === 1) this.score = 100;
-          else if (
-            answers.length === 2 &&
-            answers[answers.length - 1].correct === true
-          )
+          else if (answers.length === 2 && items[checked].correct === true)
             this.score = 50;
           else this.score = 0;
 
@@ -454,6 +503,7 @@ export function Fieldset(id, question, feedback, ...items) {
         for (const item of items) {
           const i = items.indexOf(item);
           item.mark(checked.includes(i));
+          if (checked.includes(i)) answers.push(i);
           if (item.correct === item.checked) correct++;
         }
         this.score = Math.round(100 * (correct / items.length));
@@ -461,12 +511,50 @@ export function Fieldset(id, question, feedback, ...items) {
         done();
       }
     },
+    checkDrop() {
+      /** @type {CourseContent.Dropdown} */
+      const item = items[0];
+      if (item.selected === item.correct) {
+        scoreEle.innerHTML = this.score = 100;
+      } else {
+        scoreEle.innerHTML = this.score = 0;
+      }
+
+      feedbackEle.classList.remove("hidden");
+      checkEle.classList.add("disabled");
+      this.answered = true;
+      callUpdate("fieldset");
+      ID.callUpdate(id, true);
+      // save progress
+      setQuestionData(id, {
+        answered: true,
+        score: this.score,
+        answers: [item.selected],
+      });
+    },
     load() {
       const data = getQuestionData(id);
       if (!data) return;
       if (!data.answered) return;
       this.answered = true;
       this.score = data.score;
+
+      scoreEle.innerHTML = this.score;
+      scoreEle.classList.add("color");
+
+      feedbackEle.classList.remove("hidden");
+      checkEle.classList.add("disabled");
+
+      callUpdate("fieldset");
+      ID.callUpdate(id, true);
+
+      if (contentType === "dropdown") items[0].load(data.answers[0]);
+      else if (contentType === "checkbox" || contentType === "radiobox") {
+        for (const item of items) {
+          const i = items.indexOf(item);
+          item.mark(data.answers.includes(i));
+        }
+      }
     },
   };
 }
@@ -513,7 +601,7 @@ export function RadioBox(text, correct) {
   let ref;
 
   return {
-    type: "multipleChoice",
+    type: "radiobox",
     radio: true,
     text,
     correct,
@@ -567,7 +655,7 @@ export function CheckBox(text, correct) {
   );
 
   return {
-    type: "multipleChoice",
+    type: "checkbox",
     radio: false,
     text,
     correct,
@@ -599,18 +687,26 @@ export function CheckBox(text, correct) {
  * @returns {CourseContent.Dropdown}
  */
 export function Dropdown(correctIndex, ...options) {
+  const id = Math.random().toString(36).slice(2);
+  const select = h("select", { id });
+  const root = h("label", { class: "dropdown code", for: id }, select);
   return {
     type: "dropdown",
     options,
     score: 0,
     answered: false,
     correct: options[correctIndex],
+    get selected() {
+      return select.value;
+    },
     render() {
-      const id = Math.random().toString(36).slice(2);
-      const select = h("select", { id });
-      const root = h("label", { class: "dropdown code", for: id }, select);
+      select.innerHTML = "";
       for (const i of options) select.appendChild(h("option", { value: i }, i));
       return root;
+    },
+    load(data) {
+      select.value = data;
+      select.setAttribute("disabled", true);
     },
   };
 }

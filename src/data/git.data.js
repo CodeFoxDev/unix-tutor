@@ -130,17 +130,21 @@ export default Course({
           "git_initialize_new_repo",
           //
           "Which command would you use to create a new git repository",
-          ``,
+          `${code("git init")} is used to initialize a new git repository, by calling ${code(
+            "git --help"
+          )} you could see all the available commands, and by searching for a bit you should've seen the init command`,
           //
           Dropdown(3, "git create", "git new", "git clone", "git init")
         ),
 
-        Header("Initializing the git repository"),
-        `To initialize the git repository, call the following command:`,
-        Code("git init"),
-        `This creates a git repository on the branch ${code("master")}, you might find a hint that looks something like the this:`,
-        Code(`${color(
-          `hint: Using 'master' as the name for the initial branch. This default branch name <br>
+        Conditional(
+          "git_initialize_new_repo",
+          Header("Initializing the git repository"),
+          `To initialize the git repository, call the following command:`,
+          Code("git init"),
+          `This creates a git repository on the branch ${code("master")}, you might find a hint that looks something like the this:`,
+          Code(`${color(
+            `hint: Using 'master' as the name for the initial branch. This default branch name <br>
         hint: is subject to change. To configure the initial branch name to use in all <br>
         hint: of your new repositories, which will suppress this warning, call: <br>
         hint:  <br>
@@ -150,12 +154,13 @@ export default Course({
         hint: 'development'. The just-created branch can be renamed via this command: <br>
         hint:  <br>
         hint: 	git branch -m <name> <br>`,
-          "yellow"
-        )}
+            "yellow"
+          )}
         Initialized empty Git repository in /home/robin/dev/informatica/test/.git/
         `),
-        `I will explain later what you should do with this, but for now just keep it as is.`,
-        `Now that you've created your repository, git will track changes to files in this directory, as long as the ${code(".git")} folder is not deleted.`
+          `I will explain later what you should do with this, but for now just keep it as is.`,
+          `Now that you've created your repository, git will track changes to files in this directory, as long as the ${code(".git")} folder is not deleted.`
+        )
       ),
       Page(
         "Adding your changed files",
