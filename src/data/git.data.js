@@ -174,7 +174,9 @@ export default Course({
         `Now that we've created a file, we need some content in it.
         You can add the content using your favorite text editor, or use some terminal tricks to add some content to a file.
         To do this, we will use the ${code("echo")} command and the ${code(">>")} operator. The command will look like this;`,
-        Code(`echo "# Hello, world" >> index.md`)
+        Code(`echo "# Hello, world" >> index.md`),
+        `This operator will concatenate the output of the first command into the file called ${code("index.md")}.
+        And the echo command simply outputs the value of the arguments after it.`
         // explain operator
         // use cat command to view contents
 
