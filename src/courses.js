@@ -104,6 +104,7 @@ on("load", (e) => {
   if (e.path.startsWith("/courses/viewer")) {
     const params = new URLSearchParams(e.search);
     if (e.search === "" || !params.has("course")) return navigate("/courses");
+    history.pushState({ path: e.path }, "", `${e.path}/${e.search}`);
     const split = params.get("page")?.split("-") ?? ["0", "0"];
 
     const course = courses.find((e) => e.id === params.get("course"));

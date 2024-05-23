@@ -175,6 +175,7 @@ export default Course({
           ),
 
           Conditional(
+            `string_multiplication_question`,
             Header(`Manipulating text with string indexing!`),
             `Let's dive in this classic situation:
             I've got this string ${code("myString = 'Hello World!'")}.
@@ -183,7 +184,7 @@ export default Course({
             Every character in a string has its own index, starting with 0.
             If you want to assign the first letter ${code("H")} to ${code("x")}
             you can use string indexing like this: ${code("x = myString[0]")}.
-            Now, if we use ${code("print(x)")}, we get ${code("H")} as output.`,
+            Now, if we use ${code("print(x)")}, we get ${code("H")} as output. <br>`,
 
             `But what if we want to print 'Hello' entirely?
             We need to use a range of indices to achieve that.
@@ -200,8 +201,8 @@ export default Course({
               The last index is 5, so you might think the last returned letter is 'o',
               but then you would be incorrect. The last letter is never included in slicing.`,
               RadioBox("P"),
-              RadioBox("tho"),
-              RadioBox("th", true)
+              RadioBox("tho", true),
+              RadioBox("thon")
             ),
 
             Conditional(
@@ -215,9 +216,9 @@ export default Course({
               Fieldset(
                 `slicing_question_2`,
                 `Given the string ${code('breakfast = "pancakes"')}, in what ways can I return 'cake' with slicing.`,
-                ``,
+                `The 'c' is located at index 3 from the front, and -5 from the back. And the 'e' is located at index 7 from the front and -1 from the back`,
                 CheckBox("breakfast[3:8]"),
-                CheckBox("breakfast[3:7", true),
+                CheckBox("breakfast[3:7]", true),
                 CheckBox("breakfast[-5:-1]", true),
                 CheckBox("breakfast[-5:-2]")
               )

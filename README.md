@@ -30,5 +30,6 @@
 - [x] Volledig ingeleverd als zip-bestand via Classroom of Magister 5
 
 # Courses
+
 - Git
 - Python
