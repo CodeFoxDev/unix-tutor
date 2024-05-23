@@ -6,7 +6,8 @@ const link = (e, link) => `<a class="inline link" target="_blank" href="${link}"
 export default Course({
   id: "python",
   title: "Python Basics",
-  description: `A beginner-friendly guide for learning python`,
+  description: `A beginner-friendly guide for learning python, that teaches you about its syntax, with some tricky questions.`,
+  tags: ["python", "programming"],
   authors: ["Casper van den Berg"],
   sections: [
     Section(
@@ -22,7 +23,7 @@ export default Course({
 
         "We'll start with the fundamentals, including what Python is and why it is important.",
 
-        `(Install Python with ${link("https://www.python.org/", "this link")}, then head over to the next page.`
+        `Install Python with ${link("this link", "https://www.python.org/")}, then head over to the next page.`
       ),
       Page(
         "Python basics",
@@ -174,38 +175,38 @@ export default Course({
           ),
 
           Conditional(
-            Header(`Manipulating text with string indexing!`)
+            Header(`Manipulating text with string indexing!`),
             `Let's dive in this classic situation:
             I've got this string ${code("myString = 'Hello World!'")}.
             I need to grab just the first 5 letters?
             That's where string indexing comes in!
             Every character in a string has its own index, starting with 0.
-            If you want to assign the first letter ${code('H')} to ${code('x')}
-            you can use string indexing like this: ${code('x = myString[0]')}.
-            Now, if we use ${code('print(x)')}, we get ${code('H')} as output.`,
+            If you want to assign the first letter ${code("H")} to ${code("x")}
+            you can use string indexing like this: ${code("x = myString[0]")}.
+            Now, if we use ${code("print(x)")}, we get ${code("H")} as output.`,
 
             `But what if we want to print 'Hello' entirely?
             We need to use a range of indices to achieve that.
-            Here's how to do it: ${code('myString[firstIndex:lastIndex]')}.
+            Here's how to do it: ${code("myString[firstIndex:lastIndex]")}.
             As before, the first index is 0. The last index gets excluded, so we need to go one index further.
             The first character <b>after</b> the word is the sixth character, but remember, in Python,
             we count from 0. So the index of that character is 5.
-            We can assign 'World' to ${code('y')} using ${code('y = myString[0:5]')}.`,
+            We can assign 'World' to ${code("y")} using ${code("y = myString[0:5]")}.`,
 
             Fieldset(
               `slicing_question_1`,
-              `Given the string ${code('word = "Python"')}, what does ${code('word[2:5] return?')}`,
+              `Given the string ${code('word = "Python"')}, what does ${code("word[2:5] return?")}`,
               `With first index being 2, so counting from 0, we start at the letter 't'.
               The last index is 5, so you might think the last returned letter is 'o',
               but then you would be incorrect. The last letter is never included in slicing.`,
-              RadioBox('P'),
-              RadioBox('tho'),
-              RadioBox('th', true)
+              RadioBox("P"),
+              RadioBox("tho"),
+              RadioBox("th", true)
             ),
 
             Conditional(
               `slicing_question_1`,
-              
+
               `To slice from the end, negative indices can also be used!
               You can start counting from the last character at -1.
               So the second last character has an index of -2.
@@ -215,10 +216,10 @@ export default Course({
                 `slicing_question_2`,
                 `Given the string ${code('breakfast = "pancakes"')}, in what ways can I return 'cake' with slicing.`,
                 ``,
-                CheckBox('breakfast[3:8]'),
-                CheckBox('breakfast[3:7', true),
-                CheckBox('breakfast[-5:-1]', true),
-                CheckBox('breakfast[-5:-2]')
+                CheckBox("breakfast[3:8]"),
+                CheckBox("breakfast[3:7", true),
+                CheckBox("breakfast[-5:-1]", true),
+                CheckBox("breakfast[-5:-2]")
               )
             )
           )

@@ -14,27 +14,39 @@ export function initListeners() {
     if (
       link.getAttribute("data-cold") !== null ||
       link.getAttribute("data-hot") !== null || // already listening
-      link.pathname.startsWith("http://") ||
-      link.pathname.startsWith("https://")
+      link.hostname !== location.hostname
     )
       continue;
+
     const page =
       pages.find((e) => e.path === link.pathname) ?? prefetch(link.pathname);
 
     link.setAttribute("data-hot", true);
 
     link.addEventListener("click", (e) => {
+      if (
+        e.target.tagName === "A" ||
+        e.target.getAttribute("data-cold") !== null
+      )
+        return;
       e.preventDefault();
 
-      if (link.pathname === location.pathname) return;
-      const shouldNavigate = emit("navigate", { path: link.pathname });
+      if (
+        link.pathname === location.pathname &&
+        link.search === location.search
+      )
+        return;
+      const shouldNavigate = emit("navigate", {
+        path: link.pathname,
+        search: link.search,
+      });
       if (shouldNavigate === false) return;
 
       (async () => {
         let _page = await page;
         if (!_page) return;
         render(_page);
-        emit("load", { path: link.pathname });
+        emit("load", { path: link.pathname, search: link.search });
       })();
     });
   }

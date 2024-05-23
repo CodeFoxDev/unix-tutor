@@ -3,6 +3,7 @@ declare namespace Courses {
     id: string;
     title: string;
     description: string;
+    tags: string[];
     authors: string[];
     sections: Section[];
 

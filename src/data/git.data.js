@@ -7,7 +7,8 @@ const color = (e, color) => `<span style="color: ${color};">${e}</span>`;
 export default Course({
   id: "git",
   title: "Code management with Git",
-  description: `An introduction to version control with git`,
+  description: `A short but powerfull introduction to Git, while learning some other essential commands.`,
+  tags: ["Git", "Source control", "Collaboration"],
   authors: ["Robin de Vos", "Mark Dijkhuizen", "Casper van den Berg"],
   sections: [
     Section(
