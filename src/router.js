@@ -25,20 +25,24 @@ export function initListeners() {
 
     link.addEventListener("click", (e) => {
       if (
-        e.target.tagName === "A" ||
+        (e.target.tagName === "A" &&
+          e.target.getAttribute("data-cold") !== null) ||
         e.target.getAttribute("data-cold") !== null
       )
         return;
+
       e.preventDefault();
 
       if (
         link.pathname === location.pathname &&
-        link.search === location.search
+        link.search === location.search &&
+        link.hash === location.hash
       )
         return;
       const shouldNavigate = emit("navigate", {
         path: link.pathname,
         search: link.search,
+        hash: link.hash,
       });
       if (shouldNavigate === false) return;
 
@@ -46,7 +50,11 @@ export function initListeners() {
         let _page = await page;
         if (!_page) return;
         render(_page);
-        emit("load", { path: link.pathname, search: link.search });
+        emit("load", {
+          path: link.pathname,
+          search: link.search,
+          hash: link.hash,
+        });
       })();
     });
   }

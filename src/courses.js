@@ -52,6 +52,7 @@ function loadCoursesView() {
             class: "link inline",
             target: "_blank",
             href: `https://github.com/${author.username}`,
+            "data-cold": true,
           },
           author.name
         )
@@ -64,6 +65,7 @@ function loadCoursesView() {
         class: "picture",
         target: "_blank",
         href: `https://github.com/${author.username}`,
+        "data-cold": true,
       });
       if (author.picture !== undefined)
         div.appendChild(h("img", { src: author.picture, "data-cold": true }));

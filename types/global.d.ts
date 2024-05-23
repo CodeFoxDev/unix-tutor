@@ -93,6 +93,7 @@ declare namespace Router {
 
   interface EventData {
     path: string;
+    hash: string;
     search: string;
   }
 
