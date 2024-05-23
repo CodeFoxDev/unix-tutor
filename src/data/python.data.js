@@ -148,28 +148,87 @@ export default Course({
         Fieldset(
           `string_addition_question`,
           `What is the output of ${code(`'It is May' + '22' + 'nd'`)}`,
-          `Don't forget spaces when adding strings! You won't get an error by adding number strings *${code(
+          `Don't forget spaces when adding strings! Also, you won't get an error by adding number strings *${code(
             `'letters` + "123"
           )}, however, you can't add regular numbers to strings (not allowed: ${code(`'string' + 123`)})`,
-          RadioBox(`It is May 22nd`),
+          RadioBox(`'It is May 22nd'`),
           RadioBox(`'it is may 22nd'`),
-          RadioBox(`It is May22nd`, true),
+          RadioBox(`'It is May22nd'`, true),
           RadioBox(`TypeError: can only concatenate str (not "int") to str`)
         ),
 
         Conditional(
-          `string_addition_question`
+          `string_addition_question`,
 
-          //Fieldset(`string_multiplication_question`),
-
-          /* Conditional(
+          Fieldset(
             `string_multiplication_question`,
+            `What is the output of ${code("'Bob ' * 3")}`,
+            `Capital letters remain unchanged during string addition and multiplication.
+            Since we added spaces, the result is more than single word but still a continuous string.
+            Getting a list (such as ['Bob', 'Bob', 'Bob']) is incorrect,
+            but we'll cover that in the next lesson!`,
+            RadioBox(`'bob bob bob '`),
+            RadioBox(`'Bob Bob Bob '`, true),
+            RadioBox(`['Bob', 'Bob', 'Bob']`),
+            RadioBox(`'bobbobbob`)
+          ),
 
-            Header(`String indexing`)
-          ) */
+          Conditional(
+            Header(`Manipulating text with string indexing!`)
+            `Let's dive in this classic situation:
+            I've got this string ${code("myString = 'Hello World!'")}.
+            I need to grab just the first 5 letters?
+            That's where string indexing comes in!
+            Every character in a string has its own index, starting with 0.
+            If you want to assign the first letter ${code('H')} to ${code('x')}
+            you can use string indexing like this: ${code('x = myString[0]')}.
+            Now, if we use ${code('print(x)')}, we get ${code('H')} as output.`,
+
+            `But what if we want to print 'Hello' entirely?
+            We need to use a range of indices to achieve that.
+            Here's how to do it: ${code('myString[firstIndex:lastIndex]')}.
+            As before, the first index is 0. The last index gets excluded, so we need to go one index further.
+            The first character <b>after</b> the word is the sixth character, but remember, in Python,
+            we count from 0. So the index of that character is 5.
+            We can assign 'World' to ${code('y')} using ${code('y = myString[0:5]')}.`,
+
+            Fieldset(
+              `slicing_question_1`,
+              `Given the string ${code('word = "Python"')}, what does ${code('word[2:5] return?')}`,
+              `With first index being 2, so counting from 0, we start at the letter 't'.
+              The last index is 5, so you might think the last returned letter is 'o',
+              but then you would be incorrect. The last letter is never included in slicing.`,
+              RadioBox('P'),
+              RadioBox('tho'),
+              RadioBox('th', true)
+            ),
+
+            Conditional(
+              `slicing_question_1`,
+              
+              `To slice from the end, negative indices can also be used!
+              You can start counting from the last character at -1.
+              So the second last character has an index of -2.
+              Remember that the last character from left to right still gets excluded.`,
+
+              Fieldset(
+                `slicing_question_2`,
+                `Given the string ${code('breakfast = "pancakes"')}, in what ways can I return 'cake' with slicing.`,
+                ``,
+                CheckBox('breakfast[3:8]'),
+                CheckBox('breakfast[3:7', true),
+                CheckBox('breakfast[-5:-1]', true),
+                CheckBox('breakfast[-5:-2]')
+              )
+            )
+          )
         )
       ),
-      Page("Lists")
+      Page(
+        "Lists",
+
+        Header(`Python `)
+      )
     ),
   ],
 });
