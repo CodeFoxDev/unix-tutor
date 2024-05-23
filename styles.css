@@ -401,6 +401,19 @@ main.course-viewer {
       flex-shrink: 0;
       gap: 1rem;
 
+      & .btn-wrapper {
+        display: flex;
+        gap: 1rem;
+
+        & :first-child {
+          width: 100%;
+        }
+
+        & :last-child {
+          width: 3.5rem;
+        }
+      }
+
       & .sections {
         overflow-y: auto;
         display: flex;

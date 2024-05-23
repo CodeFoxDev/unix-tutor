@@ -184,7 +184,7 @@ export function Page(title, ...content) {
       nextBtn = h(
         "div",
         { role: "button", class: "button disabled" },
-        lastInCourse
+        lastInCourse === true
           ? "Finish course"
           : `Next ${lastInPart === true ? "part" : "lesson"}`
       );
@@ -623,6 +623,7 @@ export function RadioBox(text, correct) {
     },
     render(name) {
       const id = Math.random().toString(36).slice(2);
+      this.answered = false;
       ref = h(
         "div",
         { class: "input" },
