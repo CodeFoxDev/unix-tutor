@@ -8,8 +8,6 @@ import {
   setQuestionData,
 } from "./state.js";
 
-// TODO: safe progress in localStorage, or at least between pages
-
 const _listeners = [];
 const update = (name, cb) => {
   _listeners.push({
@@ -232,13 +230,13 @@ export function Page(title, ...content) {
           this.totalScore
         } points - ${Math.round(this.totalScore / this.questions)}%`;
         percentage.classList.remove("hidden");
-        // TODO: also add percentage to the sidebar
-        // TODO: also save this
       });
 
       nextBtn.addEventListener("click", () => {
         if (nextBtn.classList.contains("disabled")) return;
         if (lastInCourse) {
+          // TODO: check if all pages are done before allowing to finish?
+          navigate("/courses");
           return;
         } // return to overview
         courseRender(section, page + 1);
@@ -316,7 +314,6 @@ export function Paragraph(section) {
   };
 }
 
-// TODO: Allow to use code as item
 /**
  * @param {string[]} items
  * @returns {CourseContent.Paragraph}
@@ -392,7 +389,6 @@ export function Input(section) {
   };
 }
 
-// TODO: maybe change to object
 /**
  * @param {string} id
  * @param {string} question
