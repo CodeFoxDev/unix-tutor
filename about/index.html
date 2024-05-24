@@ -17,7 +17,7 @@
     <script src="/src/main.js" type="module"></script>
   </head>
   <body>
-    <nav data-scroll-class="filter" data-scroll-threshold="32vh">
+    <nav data-scroll-class="filter" data-scroll-threshold="16vh">
       <a class="logo" href="/">
         <svg
           width="100"
@@ -40,7 +40,97 @@
       </div>
     </nav>
     <main class="about">
-      <section class=""></section>
+      <section class="top">
+        <div class="left">
+          <h1 class="title">About</h1>
+          <div class="divider"></div>
+          <p>
+            Welcome to UNIX TUTOR, your go-to platform for mastering programming
+            skills. Whether you're just starting your journey or looking to
+            enhance your existing skills, we've got you covered with a
+            comprehensive range of courses. designed to empower you with the
+            knowledge and confidence to excel in the tech industry.
+          </p>
+          <h3>Our mission</h3>
+          <p>
+            Our mission is to make high-quality programming education accessible
+            and enjoyable for everyone. We believe that learning to code should
+            be a rewarding experience, filled with practical insights and
+            hands-on practice. Our courses are crafted to help you gain a deep
+            understanding of the subjects, whether you're a beginner or an
+            advanced learner.
+          </p>
+          <h3>Open source</h3>
+          <p>
+            We believe in transparent and open learning for everyone, that’s why
+            our entire website and the course itself are publicly accessible and
+            open for anyone to improve. This way we can ensure that our content
+            stays complete and up to date.
+          </p>
+          <div class="divider"></div>
+          <div class="from-founders">
+            <p class="bold">
+              Robin de Vos, Mark Dijkhuizen & Casper van den Berg
+            </p>
+            <p>Co-Founders of UNIX TUTOR</p>
+          </div>
+        </div>
+        <div class="right">
+          <img src="/assets/about-img.webp" alt="Office setting" />
+        </div>
+      </section>
+      <section class="contact" id="contact">
+        <form
+          action="mailto:118589@minkemacollege.nl"
+          target="_blank"
+          class="contact-form"
+        >
+          <h1 class="title">Contact us</h1>
+          <div class="name-row">
+            <div class="input-wrapper">
+              <label for="first_name"> First name </label>
+              <input
+                type="text"
+                name="first_name"
+                id="first_name"
+                placeholder="John"
+                class="input"
+              />
+            </div>
+            <div class="input-wrapper">
+              <label for="last_name">Last name</label>
+              <input
+                type="text"
+                name="last_name"
+                id="last_name"
+                placeholder="Doe"
+                class="input"
+              />
+            </div>
+          </div>
+          <div class="input-wrapper">
+            <label for="subject">Subject</label>
+            <input
+              type="text"
+              name="subject"
+              id="subject"
+              placeholder="Subject"
+              class="input"
+            />
+          </div>
+          <div class="input-wrapper">
+            <label for="body">Body</label>
+            <textarea
+              name="body"
+              id="body"
+              placeholder="Body"
+              class="input"
+            ></textarea>
+          </div>
+          <input type="submit" value="send" id="send_form" hidden />
+          <label for="send_form" class="button"> Send </label>
+        </form>
+      </section>
     </main>
   </body>
 </html>

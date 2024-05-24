@@ -17,7 +17,12 @@
     <script src="/src/main.js" type="module"></script>
   </head>
   <body>
-    <nav data-scroll-class="filter" data-scroll-threshold="32vh">
+    <!-- 
+      Nav bar gets a background effect when scroll reaches 16vh from the top of the page.
+      The data-scroll-class value gets applied as class on the element once the scrollOffset reaches data-scroll-threshold.
+      The logic is located in /src/effects/typing.js
+    -->
+    <nav data-scroll-class="filter" data-scroll-threshold="16vh">
       <a class="logo" href="/">
         <svg
           width="100"
@@ -45,6 +50,12 @@
           <div class="text">
             <h1>Elevate your</h1>
             <h1>
+              <!-- 
+                These data attributes indicate that this element should have a typing animation.
+                The words it cycles through are the `data-typing-words`.
+                And the other two values are time in miliseconds.
+                The logic is located at /src/effects/scroll.js
+              -->
               <span
                 data-typing-animation
                 data-typing-interval="4000"
@@ -68,6 +79,7 @@
         </div>
         <div class="about"></div>
         <div class="background">
+          <!-- This is the gradient on the page -->
           <object data="/assets/landing_gradient.svg">
             <div class="placeholder"></div>
           </object>
