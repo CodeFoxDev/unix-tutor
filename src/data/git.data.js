@@ -177,8 +177,21 @@ export default Course({
         To do this, we will use the ${code("echo")} command and the ${code(">>")} operator. The command will look like this;`,
         Code(`echo "# Hello, world" >> index.md`),
         `This operator will concatenate the output of the first command into the file called ${code("index.md")}.
-        And the echo command simply outputs the value of the arguments after it.`
-        // explain operator
+        And the echo command simply outputs the value of the arguments after it.`,
+        `To verify that you added the content succesfully, you can use the ${code("cat")} command, this outputs the contents of a file in to the terminal output.`,
+        Code(`cat index.md`),
+        `This should output the same content we added earlier.`,
+        Header("Checking the status"),
+        `Now that we've added a file, we should check if git is tracking it, by calling ${code("git status")}. This should output the following;`,
+        Code(`On branch master<br>
+        <br>
+        No commits yet<br>
+        <br>
+        Untracked files:<br>
+        &ensp;  (use "git add <file>..." to include in what will be committed)<br>
+        &ensp;  &ensp;  ${color("index.md", "red")}<br>
+          <br>
+        nothing added to commit but untracked files present (use "git add" to track)`)
         // use cat command to view contents
 
         // create folder with file
