@@ -30,6 +30,7 @@ export function Course(course) {
     insertSidebar() {
       const sections = document.querySelector("#viewer-sidebar-sections");
       if (!sections) return false;
+      sections.innerHTML = "";
 
       for (const sec of course.sections) {
         sections.appendChild(h("p", { class: "section-header" }, sec.name));
@@ -118,6 +119,7 @@ export function Course(course) {
       if (!outlet) return;
       outlet.innerHTML = "";
       outlet.append(rendered);
+      outlet.scrollTo({ top: 0, behavior: "instant" });
 
       if (active) active.classList.remove("active");
       active = document

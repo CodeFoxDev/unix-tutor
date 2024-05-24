@@ -14,13 +14,24 @@ function load(course, section = 0, page = 0) {
   if (page >= course.sections[section].pages.length - 1)
     page = course.sections[section].pages.length - 1;
 
-  course.insertSidebar();
-  course.render(
-    section,
-    page,
-    course.sections.length,
-    course.sections[section].pages.length
-  );
+  let resetBtn = document.querySelector("#reset-button");
+
+  resetBtn?.addEventListener("click", () => {
+    localStorage.clear();
+    window.location.search = `?course=${course.id}&page=0-0`;
+  });
+
+  const render = () => {
+    course.insertSidebar();
+    course.render(
+      section,
+      page,
+      course.sections.length,
+      course.sections[section].pages.length
+    );
+  };
+
+  render();
 
   // TODO: update document title
 }
