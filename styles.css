@@ -82,6 +82,23 @@ nav {
     top: -5rem;
   }
 
+  & .logo {
+    display: flex;
+    align-items: center;
+
+    & svg {
+      color: var(--accent);
+      height: 4rem;
+    }
+
+    & h1 {
+      font-weight: 700;
+      font-style: italic;
+      font-size: 2.4rem;
+      margin-left: -1rem;
+    }
+  }
+
   & .links {
     display: flex;
     align-items: center;
