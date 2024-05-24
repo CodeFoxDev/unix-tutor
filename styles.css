@@ -682,6 +682,11 @@ main.course-viewer {
             padding-left: 1rem;
           }
 
+          & option {
+            color: var(--text);
+            background: var(--background);
+          }
+
           &.code,
           &.code select {
             font-family: "Fira Code", monospace;
