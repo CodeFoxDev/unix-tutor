@@ -13,7 +13,7 @@
 # TODO
 
 - [x] Algehele indruk 10
-- [ ] Startpagina (tekst & plaatjes) 5
+- [X] Startpagina (tekst & plaatjes) 5
 - [x] Over ons (tekst, plaatjes, contactformulier) 20
 - [x] Werking menu (zichtbaar/onzichtbaar maken inhoud) 25
 - [x] Quizz met radiobuttons (incl. inline feedback) 25
@@ -25,7 +25,7 @@
 - [x] HTML code (werking, inspringen, commentaar, etc) 10
 - [x] CSS code (werking, inspringen, commentaar, etc) 10
 - [x] Geen overbodige code en bestanden 5
-- [ ] Ontwerpdocument (wireframes, doel/doelgroep, kleurenstal, logo, usability feedback, logboek, etc) 30
+- [X] Ontwerpdocument (wireframes, doel/doelgroep, kleurenstal, logo, usability feedback, logboek, etc) 30
 - [x] Implementatie conform ontwerp 5
 - [x] Volledig ingeleverd als zip-bestand via Classroom of Magister 5
 

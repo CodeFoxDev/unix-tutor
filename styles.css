@@ -239,7 +239,7 @@ main.course-viewer {
 }
 
 section.landing {
-  height: calc(100vh + 24rem);
+  height: 100vh;
   width: 100%;
   position: relative;
   isolation: isolate;
