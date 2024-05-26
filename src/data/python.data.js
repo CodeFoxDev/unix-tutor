@@ -229,7 +229,65 @@ export default Course({
       Page(
         "Lists",
 
-        Header(`Python `)
+        Header(`Lists in Python`),
+        `A list is a collection of items in a given order.
+        Lists are one of the most versatile data types in Python,
+        they can contain elements of different types.`,
+
+        Header(`Creating a List`),
+        `Lists can be created by placing all the items inside square brackets ${code(`[]`)}, separated by commas.
+        Here's an example: ${code(`capitals = ["Amsterdam", "Brussel", "Paris]`)}.`,
+
+        Fieldset(
+          `list_creation_question`,
+          `What list is <b>not</b> correct?`,
+          `Lists can contain elements of multiple types, even other lists.
+          Additionally, lists can be empty.
+          This is especially useful when you plan to dynamically add elements later in your code.`,
+          RadioBox(`${code(`[["apple", "red"], ["banana", "orange"], ["grape", "red", "green"]]`)}`),
+          RadioBox(`${code(`["John", "Smith", 30, "JohnSmith@gmail.com], True`)}`),
+          RadioBox(`${code(`06-12345678, "1234AB", "JamesWilliams@outlook.com"`)}`, true),
+          RadioBox(`${code(`[]`)}`)
+        ),
+
+        Conditional(
+          `list_creation_question`,
+
+          Header("Accessing Elements"),
+
+          `You can access any element by using its index, which, always starts at 0.
+          Lists are mutable, meaning you can change their elements.
+          Now you can do this: ${code(`capitals[0] = "Leeuwarden"`)}.`,
+
+          Fieldset(
+            `list_indexing_question`,
+            `Given ${code(`my_list = [10, 20, 30, 40]`)}, what is the output of ${code("print(my_list[2])")}`,
+            `Remember to count from 0!`,
+            RadioBox(`10`),
+            RadioBox(`20`),
+            RadioBox(`30`, true),
+            RadioBox(`40`)
+          ),
+
+          Conditional(
+            `list_indexing_question`,
+
+            Header(`Modifying Lists`),
+
+            `Let's say ${code(`fruits = ['apple', 'banana', 'orange']`)},
+            you can add elements to this list with ${code(`fruits.append("pineapple")`)}.
+            If you dislike oranges, use ${code(`fruits.remove('orange')`)}`,
+
+            Fieldset(
+              `modifying list`,
+              `What is now the output of ${code(`print(fruits)?`)}`,
+              ``,
+              RadioBox(`${code(`['apple', 'banana', 'pineapple']`)}`, true),
+              RadioBox(`${code(`[apple, 'banana', 'orange', 'pineapple']`)}`),
+              RadioBox(`${code(`['pineapple', 'apple', 'banana']`)}`)
+            )
+          )
+        )
       )
     ),
   ],
