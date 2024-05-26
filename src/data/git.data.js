@@ -191,37 +191,101 @@ export default Course({
         &ensp;  (use "git add <file>..." to include in what will be committed)<br>
         &ensp;  &ensp;  ${color("index.md", "red")}<br>
           <br>
-        nothing added to commit but untracked files present (use "git add" to track)`)
-        // use cat command to view contents
+        nothing added to commit but untracked files present (use "git add" to track)`),
 
-        // create folder with file
-        // explain how to navigate back using cd ../
+        Header("Adding directories"),
+        `Next we're going to add some folders. Add an empty directory called ${code("empty")}, I'll explain later why I've kept this directory empty.`,
+        `Also create a directory called ${code("src")}, move into it with ${code("cd")} and create a file called ${code("main.js")}.
+        Now you need to move back to the project root, but how would you do that? I've only explained how to go into a subdirectory, but not how to get out of it.`,
+        `To do this you need to now a bit more about the ${code("cd")} command, or more specifically, about paths.
+        However this is very simple, ${code(".")} in a path represents the current directory, so ${code("..")}, is the previous directory`,
+
+        Fieldset(
+          "cd_path_directory_up_syntax",
+          "Which command would you use to move up to the project directory",
+          `All of the pahts are actually valid, and the result for all of them is the same.`,
+          CheckBox(code(".."), true),
+          CheckBox(code("../"), true),
+          CheckBox(code("./.."), true)
+        ),
+
+        Header("Checking the status again"),
+        `If you call ${code("git status")} again you can see that ${code("src/main.js")} is added, but our ${code("empty")} directory is not.`,
+
+        Fieldset(
+          "git_empty_dir_not_added",
+          `Why is the ${code("empty")} directory not added?`,
+          `Git doesn't track empty directories, and the name doesn't matter.
+          If you wish to add an empty directory, you can add an empty ${code(".gitkeep")} dummy file.`,
+          RadioBox(`Git doesn't track directories called empty`),
+          RadioBox(`You need to call ${code("git add")} first`),
+          RadioBox(`Git doesn't track empty directories`, true)
+        ),
+
+        `Finally you can add the the files to commit, by calling the following;`,
+        Code("git add ."),
+        `This adds all files that follow the glob pattern ${code(".")}, which in this case is every file in this directory and its subdirectories.`
       ),
-      Page("Creating your first commit"),
       Page(
+        "Creating your first commit",
+        `Creating a commit in git is very simple; after calling ${code("git add")}, you simply call the following command;`,
+        Code(`git commit -m "First commit"`),
+        `Where the part after ${code("-m")} is the commit message, which is ${code("First commit")} in this case.
+        This message is a very common message for the first commit, as you haven't really changed anything but only added some basic files.`
+      )
+      /* Page(
         "Branches"
         // explain to use main branch by default
         // explain checkout and branch commands
         // explain how to set defualt branch to main
-      )
+      ) */
     ),
     Section(
       "2. Collaboration",
       Page(
         "Remote editing",
+        `For this example we'll be using Github, but other services like, Gitlab and BitBucket, are functionally the same.`,
         Header("Creating an account on github"),
         OrderedList(
           `Head over to ${link("github.com", "https://github.com/signup")} and follow the steps to create your own github account`,
           "Once you've finised the setup, go ahead and press <q>Create Repository</q> in the dropdown of the '+' sign in the top-right corner.",
           Image("/assets/courses/git/create_repo.png"),
           "Fill out the form to create your very first repository.",
-          "Follow the steps described at the quick setup section below.",
-          Image("/assets/courses/git/quick_setup.png"),
-          "In your prefered IDE, open your terminal and type the commands in one by one."
+          `Copy the ${code(".git")} link found under quick setup, we'll needs this later`,
+          Image("/assets/courses/git/quick_setup.png")
         ),
 
+        Header("Adding a remote"),
+        `Github is a remote in git's terms, a remote is a place where you can sync your code with and collaborate with other people.
+        Open up the terminal in your previously created repository and call the following command`,
+        Code("git remote add origin &lt;git url&gt;"),
+        `Replace the git url part with the previously copied url, this adds the remote called origin to the repository.`,
+
         // explain push, pull (and fetch?)
-        Header("Pushing and pulling")
+        Header("Preparing to push"),
+        `Before pushing our code to github, we should first change our working branch to ${code("main")}, this is related to the warning you were given, when you first called ${code("git init")}
+        You can change your branch by calling the following;`,
+        Code("git branch -m main"),
+        `This changes your working branch to main, in the future when creating a new repository you can actually call;`,
+        Code("git init -b main"),
+        `To avoid having to switch manually every time.
+        But you may we wondering why do I have to do this? Simply put they are conceptually the same thing. 
+        The convention just changed; previously the primary branch was called master and for newer repository that defaults to main.`,
+
+        Header("Pushing and pulling"),
+        "Pushing your local code to github, or any other remote, is actually very simple, you only need to call the following command",
+        Code("git push origin main"),
+        `This pushes the latest commit to the remote called origin, and on the branch main.
+        After calling this you should almost immediately see the changes on github by refreshing the website.`,
+
+        Fieldset(
+          ``,
+          `What do you think pulling your code looks like?`,
+          `The syntax of the pull command is the same as pushing, it just calls a different action.`,
+          RadioBox(code(`git pull -b main`)),
+          RadioBox(code(`git pull origin main`), true),
+          RadioBox(code(`git get main from origin`))
+        )
       )
     ),
   ],
